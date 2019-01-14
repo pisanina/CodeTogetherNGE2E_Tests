@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    public class UnitTest1
+    public class NavigationTest
     {
         private IWebDriver _driver;
 
@@ -14,12 +14,13 @@ namespace CodeTogetherNGE2E_Tests
         public void SeleniumSetup()
         {
             _driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            _driver.Url = "https://localhost:44362/";
+          //  _driver.Url = "https://localhost:44362/";
+            _driver.Url = "https://codetogetherng.azurewebsites.net/";
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 
         [Test]
-        public void Test1()
+        public void NavigationTests()
         {
             var Home = _driver.FindElement(By.Id("HomeTitle"));
             Assert.True(Home.Text == ("This side is under construction."));
