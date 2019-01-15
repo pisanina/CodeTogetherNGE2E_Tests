@@ -63,23 +63,23 @@ namespace CodeTogetherNGE2E_Tests
         }
 
         [Test]
-        public void AddProjectToLong()
+        public void AddProjectWithTooLongTitleAndDescription()
         {
-            string ToLongTitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+            string TooLongTitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-            string ToLongDescription = new string('+', 10).Replace("+", ToLongTitle);
+            string TooLongDescription = new string('+', 10).Replace("+", TooLongTitle);
 
             _driver.FindElement(By.Id("AddProject")).Click();
 
-            _driver.FindElement(By.Id("Title")).SendKeys(ToLongTitle);
+            _driver.FindElement(By.Id("Title")).SendKeys(TooLongTitle);
 
-            _driver.FindElement(By.Id("Description")).SendKeys(ToLongDescription);
+            _driver.FindElement(By.Id("Description")).SendKeys(TooLongDescription);
 
             _driver.FindElement(By.Id("Description")).SendKeys(Keys.Tab);
 
-            Assert.NotNull(_driver.FindElement(By.Id("Title-error")));
-            Assert.NotNull(_driver.FindElement(By.Id("Description-error")));
+            Assert.NotNull(_driver.PageSource.Contains("Title has a maximum length of 50."));
+            Assert.NotNull(_driver.PageSource.Contains("Description has a maximum length of 1000."));
         }
 
         private void SqlDelete(string ToDelete)
