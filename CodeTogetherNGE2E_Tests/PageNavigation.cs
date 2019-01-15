@@ -14,7 +14,7 @@ namespace CodeTogetherNGE2E_Tests
         public void SeleniumSetup()
         {
             _driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-          //  _driver.Url = "https://localhost:44362/";
+            //  _driver.Url = "https://localhost:44362/";
             _driver.Url = "https://codetogetherng.azurewebsites.net/";
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
@@ -42,15 +42,12 @@ namespace CodeTogetherNGE2E_Tests
 
             _driver.FindElement(By.Id("Login")).Click();
             Assert.NotNull(_driver.FindElement(By.Id("Input_RememberMe")));
-
-
         }
 
         [TearDown]
         public void DownSelenium()
         {
             _driver.Quit();
-            
         }
     }
 }
