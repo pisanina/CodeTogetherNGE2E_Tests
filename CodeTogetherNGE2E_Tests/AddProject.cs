@@ -20,12 +20,13 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 
-        [Test]
-        public void AddProjectTest()
+        [TestCase("Test for adding new Project Title", "Test Description of Project")]
+        [TestCase("Test for adding Project Title in Polish żółtość", "Test Description of Project")]
+        [TestCase("Test for adding Project Title in Japanese こんにちは", "Test Description of Project")]
+        [TestCase("Test Title", "Test for adding Description in Polish żółtość")]
+        [TestCase("Test Title", "Test for adding Description in Japanese こんにちは")]
+        public void AddProjectTest(string NewTitle, string NewDescription)
         {
-            string NewTitle       = "Test for adding new Project Title";
-            string NewDescription = "Test for adding new Project Description";
-
             _driver.FindElement(By.Id("AddProject")).Click();
 
             _driver.FindElement(By.Id("Title")).SendKeys(NewTitle);
@@ -42,6 +43,43 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains(NewTitle));
             Assert.False(_driver.PageSource.Contains(NewDescription));
+        }
+
+        [TestCase("", "Test for adding empty Title", "Title-error")]
+        [TestCase("AB", "Test for adding to short Title", "Title-error")]
+        [TestCase("Test for adding empty Description", "", "Description-error")]
+        [TestCase("Test for adding to short Desciption", "Short Description", "Description-error")]
+        public void AddProjectToShort(string NewTitle, string NewDescription, string Error)
+        {
+            _driver.FindElement(By.Id("AddProject")).Click();
+
+            _driver.FindElement(By.Id("Title")).SendKeys(NewTitle);
+
+            _driver.FindElement(By.Id("Description")).SendKeys(NewDescription);
+
+            _driver.FindElement(By.Id("Create")).Click();
+
+            Assert.NotNull(_driver.FindElement(By.Id(Error)));
+        }
+
+        [Test]
+        public void AddProjectToLong()
+        {
+            string ToLongTitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+            string ToLongDescription = new string('+', 10).Replace("+", ToLongTitle);
+
+            _driver.FindElement(By.Id("AddProject")).Click();
+
+            _driver.FindElement(By.Id("Title")).SendKeys(ToLongTitle);
+
+            _driver.FindElement(By.Id("Description")).SendKeys(ToLongDescription);
+
+            _driver.FindElement(By.Id("Description")).SendKeys(Keys.Tab);
+
+            Assert.NotNull(_driver.FindElement(By.Id("Title-error")));
+            Assert.NotNull(_driver.FindElement(By.Id("Description-error")));
         }
 
         private void SqlDelete(string ToDelete)
