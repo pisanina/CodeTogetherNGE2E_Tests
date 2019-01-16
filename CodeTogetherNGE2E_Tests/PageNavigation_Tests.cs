@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    public class NavigationTest
+    public class Navigation_Tests
     {
         private IWebDriver _driver;
 

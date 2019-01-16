@@ -7,18 +7,10 @@ using System.Reflection;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    public class AddProject
+    public class AddProject_Tests
     {
         private IWebDriver _driver;
-
-        [SetUp]
-        public void SeleniumSetup()
-        {
-            _driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            _driver.Url = "https://localhost:44362/";
-            // _driver.Url = "https://codetogetherng.azurewebsites.net/";
-            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
-        }
+        private AddProject_TestsPageObject Add;
 
         [TestCase("Test for adding new Project Title", "Test Description of Project")]
         [TestCase("Test for adding Project Title in Polish żółtość", "Test Description of Project")]
@@ -28,16 +20,9 @@ namespace CodeTogetherNGE2E_Tests
         // Tests for SQL Injection
         [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection")]
         [TestCase("Test Description for SQL Injection", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--")]
-
         public void AddProjectTest(string NewTitle, string NewDescription)
         {
-            _driver.FindElement(By.Id("AddProject")).Click();
-
-            _driver.FindElement(By.Id("Title")).SendKeys(NewTitle);
-
-            _driver.FindElement(By.Id("Description")).SendKeys(NewDescription);
-
-            _driver.FindElement(By.Id("Create")).Click();
+            Add.AddProject(NewTitle, NewDescription);
 
             Assert.True(_driver.PageSource.Contains(NewTitle));
             Assert.True(_driver.PageSource.Contains(NewDescription));
@@ -55,13 +40,7 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test for adding to short Desciption", "Short Description", "Description-error")]
         public void AddProjectToShort(string NewTitle, string NewDescription, string Error)
         {
-            _driver.FindElement(By.Id("AddProject")).Click();
-
-            _driver.FindElement(By.Id("Title")).SendKeys(NewTitle);
-
-            _driver.FindElement(By.Id("Description")).SendKeys(NewDescription);
-
-            _driver.FindElement(By.Id("Create")).Click();
+            Add.AddProject(NewTitle, NewDescription);
 
             Assert.NotNull(_driver.FindElement(By.Id(Error)));
         }
@@ -74,13 +53,7 @@ namespace CodeTogetherNGE2E_Tests
 
             string TooLongDescription = new string('+', 10).Replace("+", TooLongTitle);
 
-            _driver.FindElement(By.Id("AddProject")).Click();
-
-            _driver.FindElement(By.Id("Title")).SendKeys(TooLongTitle);
-
-            _driver.FindElement(By.Id("Description")).SendKeys(TooLongDescription);
-
-            _driver.FindElement(By.Id("Description")).SendKeys(Keys.Tab);
+            Add.AddProject(TooLongTitle, TooLongDescription);
 
             Assert.NotNull(_driver.PageSource.Contains("Title has a maximum length of 50."));
             Assert.NotNull(_driver.PageSource.Contains("Description has a maximum length of 1000."));
@@ -99,6 +72,16 @@ namespace CodeTogetherNGE2E_Tests
                 }
                 SQLConnect.Close();
             }
+        }
+
+        [SetUp]
+        public void SeleniumSetup()
+        {
+            _driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            _driver.Url = "https://localhost:44362/";
+            // _driver.Url = "https://codetogetherng.azurewebsites.net/";
+            Add = new AddProject_TestsPageObject(_driver);
+            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 
         [TearDown]
