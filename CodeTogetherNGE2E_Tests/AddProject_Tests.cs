@@ -34,15 +34,17 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_driver.PageSource.Contains(NewDescription));
         }
 
-        [TestCase("", "Test for adding empty Title", "Title-error")]
-        [TestCase("AB", "Test for adding to short Title", "Title-error")]
-        [TestCase("Test for adding empty Description", "", "Description-error")]
-        [TestCase("Test for adding to short Desciption", "Short Description", "Description-error")]
-        public void AddProjectToShort(string NewTitle, string NewDescription, string Error)
+        [TestCase("", "Test for adding empty Title", "Title has a minimum length of 3.")]
+        [TestCase("AB", "Test for adding to short Title", "Title has a minimum length of 3.")]
+        [TestCase("Test for adding empty Description", "", "Description has a minimum length of 20.")]
+        [TestCase("Test for adding to short Desciption", "Short Description", "Description has a minimum length of 20.")]
+        public void AddProjectTooShort(string NewTitle, string NewDescription, string Error)
         {
+            Assert.False(_driver.PageSource.Contains(Error));
+
             Add.AddProject(NewTitle, NewDescription);
 
-            Assert.NotNull(_driver.FindElement(By.Id(Error)));
+            Assert.True(_driver.PageSource.Contains(Error));
         }
 
         [Test]
