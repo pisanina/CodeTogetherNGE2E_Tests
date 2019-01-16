@@ -53,10 +53,13 @@ namespace CodeTogetherNGE2E_Tests
 
             string TooLongDescription = new string('+', 10).Replace("+", TooLongTitle);
 
+            Assert.False(_driver.PageSource.Contains("Title has a maximum length of 50."));
+            Assert.False(_driver.PageSource.Contains("Description has a maximum length of 1000."));
+
             Add.AddProject(TooLongTitle, TooLongDescription);
 
-            Assert.NotNull(_driver.PageSource.Contains("Title has a maximum length of 50."));
-            Assert.NotNull(_driver.PageSource.Contains("Description has a maximum length of 1000."));
+            Assert.True(_driver.PageSource.Contains("Title has a maximum length of 50."));
+            Assert.True(_driver.PageSource.Contains("Description has a maximum length of 1000."));
         }
 
         private void SqlDelete(string ToDelete)
