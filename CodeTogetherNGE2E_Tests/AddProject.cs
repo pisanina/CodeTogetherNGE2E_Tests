@@ -25,6 +25,10 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test for adding Project Title in Japanese こんにちは", "Test Description of Project")]
         [TestCase("Test Title", "Test for adding Description in Polish żółtość")]
         [TestCase("Test Title", "Test for adding Description in Japanese こんにちは")]
+        // Tests for SQL Injection
+        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection")]
+        [TestCase("Test Description for SQL Injection", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--")]
+
         public void AddProjectTest(string NewTitle, string NewDescription)
         {
             _driver.FindElement(By.Id("AddProject")).Click();
