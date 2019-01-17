@@ -17,9 +17,6 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test for adding Project Title in Japanese こんにちは", "Test Description of Project")]
         [TestCase("Test Title", "Test for adding Description in Polish żółtość")]
         [TestCase("Test Title", "Test for adding Description in Japanese こんにちは")]
-        // Tests for SQL Injection
-        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection")]
-        [TestCase("Test Description for SQL Injection", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--")]
         public void AddProjectTest(string NewTitle, string NewDescription)
         {
             Add.AddProject(NewTitle, NewDescription);
@@ -32,6 +29,30 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains(NewTitle));
             Assert.False(_driver.PageSource.Contains(NewDescription));
+        }
+
+        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection", "',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection")]
+        [TestCase("Test Description for SQL Injection", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--", "Test Description for SQL Injection")]
+        [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','", "Test Title for SQL Injection", "','');EXEC xp_cmdshell 'echo BUM &gt;c:/A.txt'--'','", "Test Title for SQL Injection")]
+        [TestCase("Test Description for SQL Injection", "'); EXEC xp_cmdshell 'echo BUM > c:/A.txt'--'", "'); EXEC xp_cmdshell 'echo BUM &gt; c:/A.txt'--'", "Test Description for SQL Injection")]
+
+        [TestCase("',''); <script>alert('BUM!');</script>'", "Test Title for JavaScript Injection", "',''); &lt;script&gt;alert('BUM!');&lt;/script&gt;'", "Test Title for JavaScript Injection")]
+        [TestCase("Test Description for JavaScript Injection", "'); <script>alert('BUM!');</script>'--", "'); &lt;script&gt;alert('BUM!');&lt;/script&gt;'--", "Test Description for JavaScript Injection")]
+
+        [TestCase("',''); <h1>Surprise</h1>'--'','", "Test Title for HTML Injection", "',''); &lt;h1&gt;Surprise&lt;/h1&gt;'--'','", "Test Title for HTML Injection")]
+        [TestCase("Test Description for HTML Injection", "'); <h1>Surprise</h1>'--'", "'); &lt;h1&gt;Surprise&lt;/h1&gt;'--'", "Test Description for HTML Injection")]
+        public void AddProjectInjectionTest(string NewTitle, string NewDescription, string Injection, string TitleORdescription)
+        {
+            Add.AddProject(NewTitle, NewDescription);
+
+            Assert.True(_driver.PageSource.Contains(Injection));
+            Assert.True(_driver.PageSource.Contains(TitleORdescription));
+
+            SqlDelete(NewTitle);
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+
+            Assert.False(_driver.PageSource.Contains(Injection));
+            Assert.False(_driver.PageSource.Contains(TitleORdescription));
         }
 
         [TestCase("", "Test for adding empty Title", "Title has a minimum length of 3.")]
