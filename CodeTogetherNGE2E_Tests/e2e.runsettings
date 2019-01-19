@@ -13,8 +13,8 @@
     <!-- Framework35 | [Framework40] | Framework45 -->
     <TargetFrameworkVersion>NETCoreApp,Version=v2.1</TargetFrameworkVersion>
 
-    <!-- Path to Test Adapters -->
-    <TestAdaptersPaths>%SystemDrive%\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>
+    <!-- Path to Test Adapters 
+    <TestAdaptersPaths>%SystemDrive%\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>-->
 
     <!-- TestSessionTimeout is only available with Visual Studio 2017 version 15.5 and higher -->
     <!-- Specify timeout in milliseconds. A valid value should be greater than 0 -->
@@ -55,18 +55,5 @@
     <Parameter name="webAppUrl" value="https://localhost:44362/" />
     <Parameter name="webDriverLocation" value="" />
   </TestRunParameters>
-
-  <!-- Adapter Specific sections -->
-
-  <!-- MSTest adapter -->
-  <MSTest>
-    <MapInconclusiveToFailed>True</MapInconclusiveToFailed>
-    <CaptureTraceOutput>false</CaptureTraceOutput>
-    <DeleteDeploymentDirectoryAfterTestRunIsComplete>False</DeleteDeploymentDirectoryAfterTestRunIsComplete>
-    <DeploymentEnabled>False</DeploymentEnabled>
-    <AssemblyResolution>
-      <Directory path="D:\myfolder\bin\" includeSubDirectories="false"/>
-    </AssemblyResolution>
-  </MSTest>
 
 </RunSettings>
