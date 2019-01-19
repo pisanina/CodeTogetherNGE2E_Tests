@@ -103,10 +103,15 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            _driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            _driver.Url = "https://localhost:44362/";
-            // _driver.Url = "https://codetogetherng.azurewebsites.net/";
+            var webDriverLocation = TestContext.Parameters["webDriverLocation"];
+            if (string.IsNullOrWhiteSpace(webDriverLocation))
+                webDriverLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+           _driver = new ChromeDriver(webDriverLocation);
+
+            _driver.Url = TestContext.Parameters["webAppUrl"];
+
             Add = new AddProject_TestsPageObject(_driver);
+
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 
