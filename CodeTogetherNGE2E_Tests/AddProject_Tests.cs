@@ -12,9 +12,9 @@ namespace CodeTogetherNGE2E_Tests
         private IWebDriver _driver;
         private AddProject_TestsPageObject Add;
 
-        [TestCase("Test for adding new Project Title", "Test Description of Project")]
-        [TestCase("Test for adding Project Title in Polish żółtość", "Test Description of Project")]
-        [TestCase("Test for adding Project Title in Japanese こんにちは", "Test Description of Project")]
+        [TestCase("Test for adding new Project Title", "Test Description 1 of Project")]
+        [TestCase("Test for adding Project Title in Polish żółtość", "Test Description 2 of Project")]
+        [TestCase("Test for adding Project Title in Japanese こんにちは", "Test Description 3 of Project")]
         [TestCase("Test Title", "Test for adding Description in Polish żółtość")]
         [TestCase("Test Title", "Test for adding Description in Japanese こんにちは")]
         public void AddProjectTest(string NewTitle, string NewDescription)
@@ -31,9 +31,9 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_driver.PageSource.Contains(NewDescription));
         }
 
-        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection", "',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection")]
+        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection 1", "',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection 1")]
         [TestCase("Test Description for SQL Injection", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--", "Test Description for SQL Injection")]
-        [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','", "Test Title for SQL Injection", "','');EXEC xp_cmdshell 'echo BUM &gt;c:/A.txt'--'','", "Test Title for SQL Injection")]
+        [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','", "Test Title for SQL Injection 2", "','');EXEC xp_cmdshell 'echo BUM &gt;c:/A.txt'--'','", "Test Title for SQL Injection 2")]
         [TestCase("Test Description for SQL Injection", "'); EXEC xp_cmdshell 'echo BUM > c:/A.txt'--'", "'); EXEC xp_cmdshell 'echo BUM &gt; c:/A.txt'--'", "Test Description for SQL Injection")]
 
         [TestCase("',''); <script>alert('BUM!');</script>'", "Test Title for JavaScript Injection", "',''); &lt;script&gt;alert('BUM!');&lt;/script&gt;'", "Test Title for JavaScript Injection")]
