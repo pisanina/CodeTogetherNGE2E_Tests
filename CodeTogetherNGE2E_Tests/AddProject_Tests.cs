@@ -88,7 +88,7 @@ namespace CodeTogetherNGE2E_Tests
         private void SqlDelete(string ToDelete)
         {
             using (SqlConnection SQLConnect =
-                new SqlConnection("Server=DESKTOP-67FEEF1\\SQLEXPRESS;Database=CodeTogetherNG;User Id=codetogetherng;Password=#EDC2wsx$RFV;"))
+                new SqlConnection(TestContext.Parameters["connectionString"]))
             {
                 SQLConnect.Open();
                 using (SqlCommand Delete = new SqlCommand("Delete from Project Where Title = @T;", SQLConnect))
