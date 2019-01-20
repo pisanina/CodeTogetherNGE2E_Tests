@@ -52,9 +52,9 @@
 
   <!-- Parameters used by tests at runtime -->
   <TestRunParameters>
-    <Parameter name="webAppUrl" value="https://localhost:44362/" />
+    <Parameter name="webAppUrl" value="" />
     <Parameter name="webDriverLocation" value="" />
-    <Parameter name="connectionString" value="Server=DESKTOP-67FEEF1\\SQLEXPRESS;Database=CodeTogetherNG;User Id=codetogetherng;Password=#EDC2wsx$RFV;" />
+    <Parameter name="connectionString" value="" />
   </TestRunParameters>
 
 </RunSettings>

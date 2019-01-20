@@ -88,7 +88,7 @@ namespace CodeTogetherNGE2E_Tests
         private void SqlDelete(string ToDelete)
         {
             using (SqlConnection SQLConnect =
-                new SqlConnection(TestContext.Parameters["connectionString"]))
+                new SqlConnection(Configuration.ConnectionString))
             {
                 SQLConnect.Open();
                 using (SqlCommand Delete = new SqlCommand("Delete from Project Where Title = @T;", SQLConnect))
@@ -103,12 +103,9 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            var webDriverLocation = TestContext.Parameters["webDriverLocation"];
-            if (string.IsNullOrWhiteSpace(webDriverLocation))
-                webDriverLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-           _driver = new ChromeDriver(webDriverLocation);
+           _driver = new ChromeDriver(Configuration.WebDriverLocation);
 
-            _driver.Url = TestContext.Parameters["webAppUrl"];
+            _driver.Url = Configuration.WebApiUrl;
 
             Add = new AddProject_TestsPageObject(_driver);
 

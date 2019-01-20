@@ -13,12 +13,9 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            var webDriverLocation = TestContext.Parameters["webDriverLocation"];
-            if (string.IsNullOrWhiteSpace(webDriverLocation))
-                webDriverLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            _driver = new ChromeDriver(webDriverLocation);
+            _driver = new ChromeDriver(Configuration.WebDriverLocation);
 
-            _driver.Url = TestContext.Parameters["webAppUrl"];
+            _driver.Url = Configuration.WebApiUrl;
 
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
