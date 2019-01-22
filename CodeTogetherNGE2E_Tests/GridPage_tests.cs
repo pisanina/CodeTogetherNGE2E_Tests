@@ -30,7 +30,18 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_driver.PageSource.Contains(ToSearch));
         }
 
+        [Test]
+        public void DetailView()
+        {
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
 
+            Assert.True(_driver.PageSource.Contains("Search"));
+
+            _driver.FindElement(By.XPath("/html/body/div/table/tbody/tr[2]/td[1]/a/span")).Click();
+
+            Assert.False(_driver.PageSource.Contains("Search"));
+            Assert.True(_driver.PageSource.Contains("CreationDate"));
+        }
 
 
         [SetUp]
