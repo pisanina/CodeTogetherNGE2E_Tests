@@ -44,6 +44,25 @@ namespace CodeTogetherNGE2E_Tests
         }
 
 
+        [Test]
+        public void DetailViewBeforeSearch()
+        {
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+
+            Assert.True(_driver.PageSource.Contains("Test"));
+
+            _driver.FindElement(By.Id("SearchInput")).SendKeys("Funny");
+            _driver.FindElement(By.Id("SearchInput")).SendKeys(Keys.Enter);
+
+            Assert.False(_driver.PageSource.Contains("Test"));
+
+            _driver.FindElement(By.XPath("/html/body/div/table/tbody/tr[2]/td[1]/a/span")).Click();
+
+            Assert.False(_driver.PageSource.Contains("Search"));
+            Assert.True(_driver.PageSource.Contains("CreationDate"));
+            Assert.True(_driver.PageSource.Contains("Funny"));
+        }
+
         [SetUp]
         public void SeleniumSetup()
         {
