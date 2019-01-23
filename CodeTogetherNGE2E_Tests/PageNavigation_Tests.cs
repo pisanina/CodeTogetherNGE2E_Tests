@@ -1,8 +1,6 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System.IO;
-using System.Reflection;
 
 namespace CodeTogetherNGE2E_Tests
 {

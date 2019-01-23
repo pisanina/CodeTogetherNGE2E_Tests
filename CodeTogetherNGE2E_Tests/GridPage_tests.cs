@@ -15,19 +15,39 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Project")] // Search in Title
         [TestCase("Yes")]  // Search in Description
         [TestCase("ć")]   // Test for foreign languages
-
+        [TestCase("TEST")] // Test for key sensitive in search
+        
         public void SearchProject(string ToSearch)
         {
             _driver.FindElement(By.Id("ProjectsGrid")).Click();
 
             Assert.True(_driver.PageSource.Contains("Funny"));
-            Assert.True(_driver.PageSource.Contains(ToSearch));
+            Assert.True(_driver.PageSource.Contains(ToSearch, System.StringComparison.InvariantCultureIgnoreCase));
 
             _driver.FindElement(By.Id("SearchInput")).SendKeys(ToSearch);
             _driver.FindElement(By.Id("SearchButton")).Click();
 
             Assert.False(_driver.PageSource.Contains("Funny"));
-            Assert.True(_driver.PageSource.Contains(ToSearch));
+            Assert.True(_driver.PageSource.Contains(ToSearch, System.StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        [Test]
+        public void SearchProjectToolong()
+        {
+            string ToSearch = "We create this project to test our search input, especially it's lenght";
+            string OnPage = "We create this project to test our search input,";
+
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+
+            
+            Assert.True(_driver.PageSource.Contains(OnPage, System.StringComparison.InvariantCultureIgnoreCase));
+
+            _driver.FindElement(By.Id("SearchInput")).SendKeys(ToSearch);
+            _driver.FindElement(By.Id("SearchButton")).Click();
+
+            Assert.False(_driver.PageSource.Contains(ToSearch, System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.False(_driver.PageSource.Contains(OnPage, System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.True(_driver.PageSource.Contains("Sorry, there is no match."));
         }
 
         [Test]
