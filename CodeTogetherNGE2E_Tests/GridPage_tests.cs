@@ -57,12 +57,12 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.True(_driver.PageSource.Contains("Search"));
 
-            _driver.FindElement(By.XPath("/html/body/div/table/tbody/tr[2]/td[1]/a/span")).Click();
+            _driver.FindElement(By.XPath("/html/body/div/div/a[1]/div/h4")).Click();
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
         }
-
+        
 
         [Test]
         public void DetailViewBeforeSearch()
@@ -76,7 +76,7 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains("Test"));
 
-            _driver.FindElement(By.XPath("/html/body/div/table/tbody/tr[2]/td[1]/a/span")).Click();
+            _driver.FindElement(By.XPath("/html/body/div/div/a[1]/div/h4")).Click();
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
