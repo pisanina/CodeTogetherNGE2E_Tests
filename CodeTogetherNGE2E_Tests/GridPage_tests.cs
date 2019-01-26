@@ -57,7 +57,7 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.True(_driver.PageSource.Contains("Search"));
 
-            _driver.FindElement(By.XPath("/html/body/div/div/a[1]/div/h4")).Click();
+            _driver.FindElement(By.XPath("/html/body/div/div/div[1]/a")).Click();
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
@@ -76,7 +76,8 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains("Test"));
 
-            _driver.FindElement(By.XPath("/html/body/div/div/a[1]/div/h4")).Click();
+            _driver.FindElement(By.XPath("/html/body/div/div/div[1]/a")).Click();
+          
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
