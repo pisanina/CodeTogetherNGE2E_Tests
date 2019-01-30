@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System.Data.SqlClient;
-using System.IO;
-using System.Reflection;
+
 
 namespace CodeTogetherNGE2E_Tests
 {
@@ -14,7 +12,7 @@ namespace CodeTogetherNGE2E_Tests
 
         [TestCase("Project")] // Search in Title
         [TestCase("Yes")]  // Search in Description
-        [TestCase("ć")]   // Test for foreign languages
+        [TestCase("ęć")]   // Test for foreign languages
         [TestCase("TEST")] // Test for key sensitive in search
         
         public void SearchProject(string ToSearch)
@@ -48,6 +46,31 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_driver.PageSource.Contains(ToSearch, System.StringComparison.InvariantCultureIgnoreCase));
             Assert.False(_driver.PageSource.Contains(OnPage, System.StringComparison.InvariantCultureIgnoreCase));
             Assert.True(_driver.PageSource.Contains("Sorry, there is no match."));
+        }
+        [Test]
+        public void SearchProjectMinLenght()
+        {
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+            Assert.True(_driver.PageSource.Contains("Test", System.StringComparison.InvariantCultureIgnoreCase));
+
+
+            var SearchInput = _driver.FindElement(By.Id("SearchInput"));
+          
+            //Check if SearchInput has validation
+            Assert.IsNotEmpty(SearchInput.GetAttribute("validationMessage"));
+
+            SearchInput.SendKeys("F");
+            SearchInput.SendKeys(Keys.Enter);
+            //Check for Project in grid that don't have leter "F" in Title or Description
+            //so we now that Search didn't run
+            Assert.True(_driver.PageSource.Contains("Another simply Test")); // 
+            SearchInput.Clear();
+
+            //Check for proper Search behavior when two letters are enter 
+            SearchInput.SendKeys("Fu");
+            SearchInput.SendKeys(Keys.Enter);
+            Assert.False(_driver.PageSource.Contains("Another simply Test"));
+            Assert.True(_driver.PageSource.Contains("Funny"));
         }
 
         [Test]
