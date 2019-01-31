@@ -4,19 +4,19 @@ namespace CodeTogetherNGE2E_Tests
 {
     public class AddProject_TestsPageObject
     {
-        private IWebDriver driver;
+        private IWebDriver _driver;
 
         public AddProject_TestsPageObject(IWebDriver driver)
         {
-            this.driver = driver;
+            this._driver = driver;
         }
 
         public void AddProject(string Title, string Description)
         {
-            driver.FindElement(By.Id("AddProject")).Click();
-            driver.FindElement(By.Id("Title")).SendKeys(Title);
-            driver.FindElement(By.Id("Description")).SendKeys(Description);
-            driver.FindElement(By.Id("Create")).Click();
+            _driver.FindElement(By.Id("AddProject")).Click();
+            _driver.FindElement(By.Id("Title")).SendKeys(Title);
+            _driver.FindElement(By.Id("Description")).SendKeys(Description);
+            _driver.FindElement(By.Id("Create")).Click();
         }
     }
 }
