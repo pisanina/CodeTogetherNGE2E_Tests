@@ -2,8 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Data.SqlClient;
-using System.IO;
-using System.Reflection;
+
 
 namespace CodeTogetherNGE2E_Tests
 {
@@ -83,6 +82,16 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.True(_driver.PageSource.Contains("Title has a maximum length of 50."));
             Assert.True(_driver.PageSource.Contains("Description has a maximum length of 1000."));
+        }
+
+        [Test]
+        public void AddProjectThatExist()
+        {
+            Assert.False(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
+
+            Add.AddProject("Funny bunny", "Description for test project that exist");
+
+            Assert.True(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
         }
 
         private void SqlDelete(string ToDelete)
