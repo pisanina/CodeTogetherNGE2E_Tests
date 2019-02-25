@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Collections.ObjectModel;
 
 namespace CodeTogetherNGE2E_Tests
 {
@@ -109,7 +110,7 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.True(_driver.PageSource.Contains("Funny"));
 
-            _driver.FindElement(By.Id("SearchInput")).SendKeys("Two Tech");
+            _driver.FindElement(By.Id("SearchInput")).SendKeys("Two Tech (Test)");
             _driver.FindElement(By.Id("SearchInput")).SendKeys(Keys.Enter);
 
             Assert.False(_driver.PageSource.Contains("Funny"));
@@ -123,6 +124,18 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_driver.PageSource.Contains("value=\"7\" selected=\"\">JavaScript"));
             Assert.True(_driver.PageSource.Contains("<option value=\"4\">C++</option>"));
             Assert.True(Temp.Selected == false);
+        }
+
+        [Test]
+        public void GridViewTechnology()
+        {
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+
+            var projectsList = _driver.FindElements(By.XPath("/html/body/div/div/div/a/div/small"));
+
+            Assert.True(searchTech(projectsList, "Java, JavaScript"));
+            Assert.True(_driver.PageSource.Contains("Project with Two Tech"));
+            Assert.True(_driver.PageSource.Contains("Java, JavaScript"));
         }
 
         [SetUp]
@@ -141,6 +154,19 @@ namespace CodeTogetherNGE2E_Tests
         public void DownSelenium()
         {
             _driver.Quit();
+        }
+
+        public bool searchTech(ReadOnlyCollection<IWebElement> project, string Technologies)
+        {
+            bool found = false;
+            foreach (var item in project)
+            {
+                if (item.Text == Technologies)
+                { found = true; break; }
+                else
+                { found = false; }
+            }
+            return found;
         }
     }
 }
