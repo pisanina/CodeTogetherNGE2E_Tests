@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CodeTogetherNGE2E_Tests
@@ -69,6 +70,38 @@ namespace CodeTogetherNGE2E_Tests
             searchInput.SendKeys(Keys.Enter);
             Assert.False(_driver.PageSource.Contains("Another simply Test"));
             Assert.True(_driver.PageSource.Contains("Funny"));
+        }
+
+        [Test]
+        public void SearchProjectWithTechnologies()
+        {
+            string toSearch = "Project";
+            List<int> techIdList = new List<int>();
+            techIdList.Add(4);
+            techIdList.Add(6);
+            techIdList.Add(7);
+
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+
+            Assert.True(_driver.PageSource.Contains("Funny"));
+            Assert.True(_driver.PageSource.Contains(toSearch, System.StringComparison.InvariantCultureIgnoreCase));
+
+            _driver.FindElement(By.Id("SearchInput")).SendKeys(toSearch);
+
+            var TechList = _driver.FindElement(By.Id("TechList"));
+
+            foreach (var item in techIdList)
+            {
+                   TechList.FindElement(By.CssSelector("option[value=\"" + item + "\"]")).Click();
+            }
+
+            _driver.FindElement(By.Id("SearchButton")).Click();
+
+            var projectsList = _driver.FindElements(By.XPath("/html/body/div/div/div/a/div/small"));
+            Assert.False(_driver.PageSource.Contains("Funny"));
+            Assert.True(projectsList.Count ==1);
+            Assert.True(_driver.PageSource.Contains(toSearch, System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.True(searchTech(projectsList, "Assembly, C++, Java, JavaScript"));
         }
 
         [Test]
@@ -144,8 +177,6 @@ namespace CodeTogetherNGE2E_Tests
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
 
             _driver.Url = Configuration.WebApiUrl;
-
-            // Add = new AddProject_TestsPageObject(_driver);
 
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
