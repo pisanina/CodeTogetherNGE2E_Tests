@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Collections.Generic;
 using System.Data.SqlClient;
-
 
 namespace CodeTogetherNGE2E_Tests
 {
@@ -34,10 +34,8 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test Description for SQL Injection", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--", "'); CREATE LOGIN NewAdmin WITH PASSWORD = 'ABCD'--", "Test Description for SQL Injection")]
         [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','", "Test Title for SQL Injection 2", "','');EXEC xp_cmdshell 'echo BUM &gt;c:/A.txt'--'','", "Test Title for SQL Injection 2")]
         [TestCase("Test Description for SQL Injection", "'); EXEC xp_cmdshell 'echo BUM > c:/A.txt'--'", "'); EXEC xp_cmdshell 'echo BUM &gt; c:/A.txt'--'", "Test Description for SQL Injection")]
-
         [TestCase("',''); <script>alert('BUM!');</script>'", "Test Title for JavaScript Injection", "',''); &lt;script&gt;alert('BUM!');&lt;/script&gt;'", "Test Title for JavaScript Injection")]
         [TestCase("Test Description for JavaScript Injection", "'); <script>alert('BUM!');</script>'--", "'); &lt;script&gt;alert('BUM!');&lt;/script&gt;'--", "Test Description for JavaScript Injection")]
-
         [TestCase("',''); <h1>Surprise</h1>'--'','", "Test Title for HTML Injection", "',''); &lt;h1&gt;Surprise&lt;/h1&gt;'--'','", "Test Title for HTML Injection")]
         [TestCase("Test Description for HTML Injection", "'); <h1>Surprise</h1>'--'", "'); &lt;h1&gt;Surprise&lt;/h1&gt;'--'", "Test Description for HTML Injection")]
         public void AddProjectInjectionTest(string NewTitle, string NewDescription, string Injection, string TitleORdescription)
@@ -94,13 +92,33 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
         }
 
+        [Test]
+        public void AddProjectTechnology()
+        {
+            string newTitle = "Test77 for adding project with tech";
+            string newDescription = newTitle;
+
+            List<int> techList = new List<int>();
+            techList.Add(6);
+            techList.Add(7);
+
+            Add.AddProject(newTitle, newDescription, techList);
+            SqlDelete(newTitle);
+
+            Assert.True(_driver.PageSource.Contains(newTitle));
+            Assert.True(_driver.PageSource.Contains("Java, JavaScript"));
+        }
+
         private void SqlDelete(string ToDelete)
         {
             using (SqlConnection SQLConnect =
                 new SqlConnection(Configuration.ConnectionString))
             {
                 SQLConnect.Open();
-                using (SqlCommand Delete = new SqlCommand("Delete from Project Where Title = @T;", SQLConnect))
+                using (SqlCommand Delete = new SqlCommand("Delete from ProjectTechnology where ProjectId = " +
+                                                            "(Select Id From Project where Title = @T)" +
+                                                            "Delete from Project Where Title = @T; ",
+                                                            SQLConnect))
                 {
                     Delete.Parameters.Add(new SqlParameter("T", ToDelete));
                     Delete.ExecuteNonQuery();
@@ -112,7 +130,7 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-           _driver = new ChromeDriver(Configuration.WebDriverLocation);
+            _driver = new ChromeDriver(Configuration.WebDriverLocation);
 
             _driver.Url = Configuration.WebApiUrl;
 
