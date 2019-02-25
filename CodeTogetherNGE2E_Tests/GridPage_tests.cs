@@ -102,6 +102,29 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_driver.PageSource.Contains("Funny"));
         }
 
+        [Test]
+        public void DetailViewTechnology()
+        {
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+
+            Assert.True(_driver.PageSource.Contains("Funny"));
+
+            _driver.FindElement(By.Id("SearchInput")).SendKeys("Two Tech");
+            _driver.FindElement(By.Id("SearchInput")).SendKeys(Keys.Enter);
+
+            Assert.False(_driver.PageSource.Contains("Funny"));
+
+            _driver.FindElement(By.XPath("/html/body/div/div/div/a")).Click();
+            var  Temp = _driver.FindElement(By.CssSelector("option[value='3']"));
+
+            Assert.False(_driver.PageSource.Contains("Search"));
+            Assert.True(_driver.PageSource.Contains("Project with Two Tech (Test)"));
+            Assert.True(_driver.PageSource.Contains("value=\"6\" selected=\"\">Java"));
+            Assert.True(_driver.PageSource.Contains("value=\"7\" selected=\"\">JavaScript"));
+            Assert.True(_driver.PageSource.Contains("<option value=\"4\">C++</option>"));
+            Assert.True(Temp.Selected == false);
+        }
+
         [SetUp]
         public void SeleniumSetup()
         {
