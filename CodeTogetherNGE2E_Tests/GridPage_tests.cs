@@ -31,8 +31,8 @@ namespace CodeTogetherNGE2E_Tests
         [Test]
         public void SearchProjectToolong()
         {
-            string toSearch = "We create this project to test our search input, especially it's lenght";
-            string toSearchFirst50Chars = "We create this project to test our search input, e";
+            string toSearch = "We want to create web aplication with many funny bunes";
+            string toSearchFirst50Chars = "We want to create web aplication with many funny";
 
             _driver.FindElement(By.Id("ProjectsGrid")).Click();
 
@@ -62,13 +62,13 @@ namespace CodeTogetherNGE2E_Tests
             searchInput.SendKeys(Keys.Enter);
             //Check for Project in grid that don't have leter "F" in Title or Description
             //so we now that Search didn't run
-            Assert.True(_driver.PageSource.Contains("Another simply Test")); //
+            Assert.True(_driver.PageSource.Contains("Project with Two Tech")); //
             searchInput.Clear();
 
             //Check for proper Search behavior when two letters are enter
             searchInput.SendKeys("Fu");
             searchInput.SendKeys(Keys.Enter);
-            Assert.False(_driver.PageSource.Contains("Another simply Test"));
+            Assert.False(_driver.PageSource.Contains("Project with Two Tech"));
             Assert.True(_driver.PageSource.Contains("Funny"));
         }
 
@@ -174,10 +174,9 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
+            AddProject_TestsPageObject.PrepareDB();
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
-
             _driver.Url = Configuration.WebApiUrl;
-
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 

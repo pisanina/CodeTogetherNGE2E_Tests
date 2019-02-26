@@ -2,7 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 
 namespace CodeTogetherNGE2E_Tests
 {
@@ -18,16 +17,13 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test Title", "Test for adding Description in Japanese こんにちは")]
         public void AddProjectTest(string NewTitle, string NewDescription)
         {
+            Assert.False(_driver.PageSource.Contains(NewTitle));
+            Assert.False(_driver.PageSource.Contains(NewDescription));
+
             Add.AddProject(NewTitle, NewDescription);
 
             Assert.True(_driver.PageSource.Contains(NewTitle));
             Assert.True(_driver.PageSource.Contains(NewDescription));
-
-            SqlDelete(NewTitle);
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
-
-            Assert.False(_driver.PageSource.Contains(NewTitle));
-            Assert.False(_driver.PageSource.Contains(NewDescription));
         }
 
         [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection 1", "',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection 1")]
@@ -40,16 +36,13 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test Description for HTML Injection", "'); <h1>Surprise</h1>'--'", "'); &lt;h1&gt;Surprise&lt;/h1&gt;'--'", "Test Description for HTML Injection")]
         public void AddProjectInjectionTest(string NewTitle, string NewDescription, string Injection, string TitleORdescription)
         {
+            Assert.False(_driver.PageSource.Contains(NewTitle));
+            Assert.False(_driver.PageSource.Contains(NewDescription));
+
             Add.AddProject(NewTitle, NewDescription);
 
             Assert.True(_driver.PageSource.Contains(Injection));
             Assert.True(_driver.PageSource.Contains(TitleORdescription));
-
-            SqlDelete(NewTitle);
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
-
-            Assert.False(_driver.PageSource.Contains(Injection));
-            Assert.False(_driver.PageSource.Contains(TitleORdescription));
         }
 
         [TestCase("", "Test for adding empty Title", "Title has a minimum length of 3.")]
@@ -103,33 +96,16 @@ namespace CodeTogetherNGE2E_Tests
             techList.Add(7);
 
             Add.AddProject(newTitle, newDescription, techList);
-            SqlDelete(newTitle);
-
+           
             Assert.True(_driver.PageSource.Contains(newTitle));
             Assert.True(_driver.PageSource.Contains("Java, JavaScript"));
-        }
-
-        private void SqlDelete(string ToDelete)
-        {
-            using (SqlConnection SQLConnect =
-                new SqlConnection(Configuration.ConnectionString))
-            {
-                SQLConnect.Open();
-                using (SqlCommand Delete = new SqlCommand("Delete from ProjectTechnology where ProjectId = " +
-                                                            "(Select Id From Project where Title = @T)" +
-                                                            "Delete from Project Where Title = @T; ",
-                                                            SQLConnect))
-                {
-                    Delete.Parameters.Add(new SqlParameter("T", ToDelete));
-                    Delete.ExecuteNonQuery();
-                }
-                SQLConnect.Close();
-            }
         }
 
         [SetUp]
         public void SeleniumSetup()
         {
+            AddProject_TestsPageObject.PrepareDB();
+
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
 
             _driver.Url = Configuration.WebApiUrl;

@@ -35,7 +35,7 @@ namespace CodeTogetherNGE2E_Tests
             {
                 var connectionString = TestContext.Parameters["connectionString"];
                 if (string.IsNullOrWhiteSpace(connectionString))
-                    return "Server=DESKTOP-67FEEF1\\SQLEXPRESS;Database=CodeTogetherNG;User Id=codetogetherng;Password=#EDC2wsx$RFV;";
+                    return "Server=DESKTOP-67FEEF1\\SQLEXPRESS;Database=CodeTogetherNG; Trusted_Connection=True";
                 return connectionString;
             }
         }
