@@ -7,6 +7,7 @@ namespace CodeTogetherNGE2E_Tests
     public class Navigation_Tests
     {
         private IWebDriver _driver;
+        private AddProject_TestsPageObject Add;
 
         [SetUp]
         public void SeleniumSetup()
@@ -16,6 +17,9 @@ namespace CodeTogetherNGE2E_Tests
             _driver.Url = Configuration.WebApiUrl;
 
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
+
+            Add = new AddProject_TestsPageObject(_driver);
+            
         }
 
         [Test]
@@ -30,9 +34,6 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Contact")).Click();
             Assert.NotNull(_driver.FindElement(By.Id("ContactPage")));
 
-            _driver.FindElement(By.Id("AddProject")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("Title")));
-
             _driver.FindElement(By.Id("ProjectsGrid")).Click();
             Assert.NotNull(_driver.FindElement(By.Id("ProjectGridPage")));
 
@@ -41,6 +42,12 @@ namespace CodeTogetherNGE2E_Tests
 
             _driver.FindElement(By.Id("Login")).Click();
             Assert.NotNull(_driver.FindElement(By.Id("Input_RememberMe")));
+
+
+            Add.LoginUser();
+
+            _driver.FindElement(By.Id("AddProject")).Click();
+            Assert.NotNull(_driver.FindElement(By.Id("Title")));
         }
 
         [TearDown]

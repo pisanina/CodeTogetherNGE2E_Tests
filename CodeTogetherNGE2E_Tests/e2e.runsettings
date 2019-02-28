@@ -52,9 +52,9 @@
 
   <!-- Parameters used by tests at runtime -->
   <TestRunParameters>
-    <Parameter name="webAppUrl" value="" />
+    <Parameter name="webAppUrl" value="https://codetogetherng-test.azurewebsites.net/"/>
     <Parameter name="webDriverLocation" value="" />
-    <Parameter name="connectionString" value="" />
+    <Parameter name="connectionString" value="Server=codetogetherng.database.windows.net;Database=CodetogetherNG_Test;User Id=DanielZegadloSA; Password=imp!QAZ2wsx;" />
   </TestRunParameters>
 
 </RunSettings>
