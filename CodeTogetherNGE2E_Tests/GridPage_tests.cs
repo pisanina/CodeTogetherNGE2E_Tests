@@ -92,14 +92,14 @@ namespace CodeTogetherNGE2E_Tests
 
             foreach (var item in techIdList)
             {
-                   TechList.FindElement(By.CssSelector("option[value=\"" + item + "\"]")).Click();
+                TechList.FindElement(By.CssSelector("option[value=\"" + item + "\"]")).Click();
             }
 
             _driver.FindElement(By.Id("SearchButton")).Click();
 
             var projectsList = _driver.FindElements(By.XPath("/html/body/div/div/div/a/div/small"));
             Assert.False(_driver.PageSource.Contains("Funny"));
-            Assert.True(projectsList.Count ==1);
+            Assert.True(projectsList.Count == 1);
             Assert.True(_driver.PageSource.Contains(toSearch, System.StringComparison.InvariantCultureIgnoreCase));
             Assert.True(searchTech(projectsList, "Assembly, C++, Java, JavaScript"));
         }
@@ -115,6 +115,7 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
+            Assert.True(_driver.PageSource.Contains("TestUser@a.com"));
         }
 
         [Test]
@@ -133,6 +134,7 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
+            Assert.True(_driver.PageSource.Contains("TestUser@a.com"));
             Assert.True(_driver.PageSource.Contains("Funny"));
         }
 
@@ -156,6 +158,7 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_driver.PageSource.Contains("value=\"6\" selected=\"\">Java"));
             Assert.True(_driver.PageSource.Contains("value=\"7\" selected=\"\">JavaScript"));
             Assert.True(_driver.PageSource.Contains("<option value=\"4\">C++</option>"));
+            Assert.True(_driver.PageSource.Contains("TestUser@a.com"));
             Assert.True(Temp.Selected == false);
         }
 
