@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -105,7 +106,7 @@ namespace CodeTogetherNGE2E_Tests
         }
 
         [Test]
-        public void DetailView()
+        public void RedirectToDetailView()
         {
             _driver.FindElement(By.Id("ProjectsGrid")).Click();
 
@@ -115,7 +116,6 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.False(_driver.PageSource.Contains("Search"));
             Assert.True(_driver.PageSource.Contains("CreationDate"));
-            Assert.True(_driver.PageSource.Contains("TestUser@a.com"));
         }
 
         [Test]
@@ -133,9 +133,11 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.XPath("/html/body/div/div/div[1]/a")).Click();
 
             Assert.False(_driver.PageSource.Contains("Search"));
-            Assert.True(_driver.PageSource.Contains("CreationDate"));
-            Assert.True(_driver.PageSource.Contains("TestUser@a.com"));
-            Assert.True(_driver.PageSource.Contains("Funny"));
+            Assert.True(_driver.FindElement(By.Id("Title")).GetAttribute("value") == "Funny bunny");
+            Assert.True(_driver.FindElement(By.Id("Owner")).GetAttribute("value") == "TestUser@a.com");
+            Assert.True(_driver.FindElement(By.Id("Description")).GetAttribute("value") == "We want to create web aplication with many funny bunes");
+            Assert.True(_driver.FindElement(By.Id("CreationDate")).GetAttribute("value") == DateTime.Now.ToString("dd/MM/yyy"));
+            Assert.True(_driver.FindElement(By.Id("NewMembers")).GetAttribute("checked") == "true");
         }
 
         [Test]

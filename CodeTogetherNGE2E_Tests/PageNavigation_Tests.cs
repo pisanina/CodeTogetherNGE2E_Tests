@@ -43,7 +43,6 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Login")).Click();
             Assert.NotNull(_driver.FindElement(By.Id("Input_RememberMe")));
 
-
             Add.LoginUser();
 
             _driver.FindElement(By.Id("AddProject")).Click();
