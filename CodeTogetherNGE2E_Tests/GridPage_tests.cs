@@ -9,23 +9,21 @@ namespace CodeTogetherNGE2E_Tests
     internal class GridPage_Tests
     {
         private IWebDriver _driver;
+        private Grid_PageObject _grid;
 
         [TestCase("Project")] // Search in Title
         [TestCase("Yes")]  // Search in Description
         [TestCase("ęć")]   // Test for foreign languages
         [TestCase("TEST")] // Test for key sensitive in search
-        public void SearchProject(string ToSearch)
+        public void SearchProject(string toSearch)
         {
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+            Assert.True(_grid.IsProjectDisplayed("Funny"));
+            Assert.True(_grid.IsProjectDisplayed(toSearch));
 
-            Assert.True(_driver.PageSource.Contains("Funny"));
-            Assert.True(_driver.PageSource.Contains(ToSearch, System.StringComparison.InvariantCultureIgnoreCase));
+            _grid.Search(toSearch);
 
-            _driver.FindElement(By.Id("SearchInput")).SendKeys(ToSearch);
-            _driver.FindElement(By.Id("SearchButton")).Click();
-
-            Assert.False(_driver.PageSource.Contains("Funny"));
-            Assert.True(_driver.PageSource.Contains(ToSearch, System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.False(_grid.IsProjectDisplayed("Funny"));
+            Assert.True(_grid.IsProjectDisplayed(toSearch));
         }
 
         [Test]
@@ -34,42 +32,27 @@ namespace CodeTogetherNGE2E_Tests
             string toSearch = "We want to create web aplication with many funny bunes";
             string toSearchFirst50Chars = "We want to create web aplication with many funny";
 
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+            _grid.Search(toSearch, false);
 
-            var searchInput = _driver.FindElement(By.Id("SearchInput"));
+            Assert.False(_grid.GetSearch() == toSearch);
+            _grid.SearchSubmit();
 
-            searchInput.SendKeys(toSearch);
-
-            // Assert that input Search cut first 50 chars of toSearch
-            Assert.False(_driver.PageSource.Contains(toSearch, System.StringComparison.InvariantCultureIgnoreCase));
-            searchInput.SendKeys(Keys.Enter);
-
-            Assert.True(_driver.PageSource.Contains(toSearchFirst50Chars, System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.True(_grid.IsProjectDisplayed(toSearchFirst50Chars));
         }
 
         [Test]
         public void SearchProjectMinLenght()
         {
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
-            Assert.True(_driver.PageSource.Contains("Test", System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.True(_grid.IsProjectDisplayed("Test"));
 
-            var searchInput = _driver.FindElement(By.Id("SearchInput"));
+            _grid.IsSearchInputRequired();
+            _grid.Search("F");
 
-            //Check if SearchInput has validation
-            Assert.IsNotEmpty(searchInput.GetAttribute("validationMessage"));
+            Assert.True(_grid.IsProjectDisplayed("Project with Two Tech")); //
 
-            searchInput.SendKeys("F");
-            searchInput.SendKeys(Keys.Enter);
-            //Check for Project in grid that don't have leter "F" in Title or Description
-            //so we now that Search didn't run
-            Assert.True(_driver.PageSource.Contains("Project with Two Tech")); //
-            searchInput.Clear();
-
-            //Check for proper Search behavior when two letters are enter
-            searchInput.SendKeys("Fu");
-            searchInput.SendKeys(Keys.Enter);
-            Assert.False(_driver.PageSource.Contains("Project with Two Tech"));
-            Assert.True(_driver.PageSource.Contains("Funny"));
+            _grid.Search("Fu");
+            Assert.False(_grid.IsProjectDisplayed("Project with Two Tech"));
+            Assert.True(_grid.IsProjectDisplayed("Funny"));
         }
 
         [Test]
@@ -81,39 +64,28 @@ namespace CodeTogetherNGE2E_Tests
             techIdList.Add(6);
             techIdList.Add(7);
 
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
-
-            Assert.True(_driver.PageSource.Contains("Funny"));
-            Assert.True(_driver.PageSource.Contains(toSearch, System.StringComparison.InvariantCultureIgnoreCase));
-
-            _driver.FindElement(By.Id("SearchInput")).SendKeys(toSearch);
-
-            var TechList = _driver.FindElement(By.Id("TechList"));
+            Assert.True(_grid.IsProjectDisplayed("Funny"));
+            Assert.True(_grid.IsProjectDisplayed(toSearch));
 
             foreach (var item in techIdList)
             {
-                TechList.FindElement(By.CssSelector("option[value=\"" + item + "\"]")).Click();
+                _grid.SelectTechnology(item);
             }
 
-            _driver.FindElement(By.Id("SearchButton")).Click();
+            _grid.Search(toSearch);
 
-            var projectsList = _driver.FindElements(By.XPath("/html/body/div/div/div/a/div/small"));
-            Assert.False(_driver.PageSource.Contains("Funny"));
-            Assert.True(projectsList.Count == 1);
-            Assert.True(_driver.PageSource.Contains(toSearch, System.StringComparison.InvariantCultureIgnoreCase));
-            Assert.True(searchTech(projectsList, "Assembly, C++, Java, JavaScript"));
+            
+           
+            Assert.True(_grid.ProjectCount() == 1);
+            Assert.True(_grid.IsProjectDisplayed(toSearch));
+            Assert.True(_grid.IsTechnologiesDisplayed(5, "Assembly, C++, Java, JavaScript"));
         }
 
         [Test]
         public void GridViewTechnology()
         {
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
-
-            var projectsList = _driver.FindElements(By.XPath("/html/body/div/div/div/a/div/small"));
-
-            Assert.True(searchTech(projectsList, "Java, JavaScript"));
-            Assert.True(_driver.PageSource.Contains("Project with Two Tech"));
-            Assert.True(_driver.PageSource.Contains("Java, JavaScript"));
+            Assert.True(_grid.IsProjectDisplayed("Project with Two Tech"));
+            Assert.True(_grid.IsTechnologiesDisplayed(6, "Java, JavaScript"));
         }
 
         [SetUp]
@@ -122,7 +94,9 @@ namespace CodeTogetherNGE2E_Tests
             AddProject_TestsPageObject.PrepareDB();
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
             _driver.Url = Configuration.WebApiUrl;
+            _grid = new Grid_PageObject(_driver);
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
+            _driver.FindElement(By.Id("ProjectsGrid")).Click();
         }
 
         [TearDown]

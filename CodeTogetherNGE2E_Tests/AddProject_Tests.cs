@@ -105,13 +105,9 @@ namespace CodeTogetherNGE2E_Tests
         public void SeleniumSetup()
         {
             AddProject_TestsPageObject.PrepareDB();
-
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
-
             _driver.Url = Configuration.WebApiUrl;
-
             Add = new AddProject_TestsPageObject(_driver);
-
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 
