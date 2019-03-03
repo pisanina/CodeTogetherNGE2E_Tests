@@ -14,7 +14,7 @@ namespace CodeTogetherNGE2E_Tests
 
         public void GoToHome()
         {
-            _driver.FindElement(By.Id("HomeTitle")).Click();
+            _driver.FindElement(By.Id("Home")).Click();
         }
 
         public void GoToAbout()
