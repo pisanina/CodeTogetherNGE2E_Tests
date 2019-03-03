@@ -2,14 +2,10 @@
 
 namespace CodeTogetherNGE2E_Tests
 {
-    internal class Grid_PageObject
+    internal class Grid_PageObject : Navigation_PageObject
     {
-        private IWebDriver _driver;
-
-        public Grid_PageObject(IWebDriver driver)
-        {
-            this._driver = driver;
-        }
+        public Grid_PageObject(IWebDriver driver) : base(driver)
+        { }
 
         public void Search(string toSearch, bool submit = true)
         {

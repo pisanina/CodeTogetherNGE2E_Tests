@@ -7,30 +7,26 @@ namespace CodeTogetherNGE2E_Tests
     internal class RegisterPage_Tests
     {
         private IWebDriver _driver;
-        IWebElement emailInput;
-        IWebElement passwordInput;
-        IWebElement confirmPasswordInput;
-        IWebElement submitButton;
+        private Registration_PageObject _register;
 
         [TestCase("Test@a.com", "Pamięć.11")]
         public void SuccessRegisterTestWithNonStandardCharacters(string email, string password)
         {
-            emailInput.SendKeys(email);
-            passwordInput.SendKeys(password);
-            confirmPasswordInput.SendKeys(password);
-            submitButton.Click();
+            _register.Insert_Email(email);
+            _register.Insert_Password(password);
+            _register.Insert_ConfirmPassword(password);
+            _register.Click_Submit();
 
             Assert.True(_driver.PageSource.Contains("Hello Test@a.com!"));
         }
 
-     
         [TestCase("@a.com", "The Email field is not a valid e-mail address")]
         [TestCase("user@acom", "The Email field is not a valid e-mail address")]
         [TestCase("Not email", "The Email field is not a valid e-mail address")]
         public void WrongEmailTest(string email, string error)
         {
-            emailInput.SendKeys(email);
-            passwordInput.Click();
+            _register.Insert_Email(email);
+            _register.Insert_Password("");
 
             Assert.True(_driver.PageSource.Contains(error));
         }
@@ -41,10 +37,10 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies molestie urna at massa nunc.9", "The Password must be at least 6 and at max 100 characters long.")]
         public void WrongPasswordTest(string password, string error)
         {
-            emailInput.SendKeys("SomeMail@a.com");
-            passwordInput.SendKeys(password);
-            confirmPasswordInput.SendKeys(password);
-            submitButton.Click();
+            _register.Insert_Email("SomeMail@a.com");
+            _register.Insert_Password(password);
+            _register.Insert_ConfirmPassword(password);
+            _register.Click_Submit();
 
             Assert.True(_driver.PageSource.Contains(error));
         }
@@ -52,10 +48,10 @@ namespace CodeTogetherNGE2E_Tests
         [Test]
         public void UserExist()
         {
-            emailInput.SendKeys("TestUser@a.com");
-            passwordInput.SendKeys("Password.123");
-            confirmPasswordInput.SendKeys("Password.123");
-            submitButton.Click();
+            _register.Insert_Email("TestUser@a.com");
+            _register.Insert_Password("Password.123");
+            _register.Insert_ConfirmPassword("Password.123");
+            _register.Click_Submit();
 
             Assert.True(_driver.PageSource.Contains("User name 'TestUser@a.com' is already taken."));
         }
@@ -63,17 +59,12 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            AddProject_TestsPageObject.PrepareDB();
-
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
             _driver.Url = Configuration.WebApiUrl;
-            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
-            _driver.FindElement(By.Id("Register")).Click();
-
-            emailInput = _driver.FindElement(By.Id("Input_Email"));
-            passwordInput = _driver.FindElement(By.Id("Input_Password"));
-            confirmPasswordInput = _driver.FindElement(By.Id("Input_ConfirmPassword"));
-            submitButton = _driver.FindElement(By.XPath("/html/body/div/div/div/form/button"));
+            _register = new Registration_PageObject(_driver);
+            _register.PrepareDB();
+            _register.ClickCookieConsent();
+            _register.GoToRegister();
         }
 
         [TearDown]

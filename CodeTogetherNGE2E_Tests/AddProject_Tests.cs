@@ -8,7 +8,7 @@ namespace CodeTogetherNGE2E_Tests
     public class AddProject_Tests
     {
         private IWebDriver _driver;
-        private AddProject_TestsPageObject Add;
+        private AddProject_TestsPageObject _add;
 
         [TestCase("Test for adding new Project Title", "Test Description 1 of Project")]
         [TestCase("Test for adding Project Title in Polish żółtość", "Test Description 2 of Project")]
@@ -20,7 +20,7 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_driver.PageSource.Contains(NewTitle));
             Assert.False(_driver.PageSource.Contains(NewDescription));
 
-            Add.AddProject(NewTitle, NewDescription);
+            _add.AddProject(NewTitle, NewDescription);
 
             Assert.True(_driver.PageSource.Contains(NewTitle));
             Assert.True(_driver.PageSource.Contains(NewDescription));
@@ -39,7 +39,7 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_driver.PageSource.Contains(NewTitle));
             Assert.False(_driver.PageSource.Contains(NewDescription));
 
-            Add.AddProject(NewTitle, NewDescription);
+            _add.AddProject(NewTitle, NewDescription);
 
             Assert.True(_driver.PageSource.Contains(Injection));
             Assert.True(_driver.PageSource.Contains(TitleORdescription));
@@ -53,7 +53,7 @@ namespace CodeTogetherNGE2E_Tests
         {
             Assert.False(_driver.PageSource.Contains(Error));
 
-            Add.AddProject(NewTitle, NewDescription);
+            _add.AddProject(NewTitle, NewDescription);
 
             Assert.True(_driver.PageSource.Contains(Error));
         }
@@ -69,7 +69,7 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_driver.PageSource.Contains("Title has a maximum length of 50."));
             Assert.False(_driver.PageSource.Contains("Description has a maximum length of 1000."));
 
-            Add.AddProject(TooLongTitle, TooLongDescription);
+            _add.AddProject(TooLongTitle, TooLongDescription);
 
             Assert.True(_driver.PageSource.Contains("Title has a maximum length of 50."));
             Assert.True(_driver.PageSource.Contains("Description has a maximum length of 1000."));
@@ -80,7 +80,7 @@ namespace CodeTogetherNGE2E_Tests
         {
             Assert.False(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
 
-            Add.AddProject("Funny bunny", "Description for test project that exist");
+            _add.AddProject("Funny bunny", "Description for test project that exist");
 
             Assert.True(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
         }
@@ -95,8 +95,8 @@ namespace CodeTogetherNGE2E_Tests
             techList.Add(6);
             techList.Add(7);
 
-            Add.AddProject(newTitle, newDescription, techList);
-           
+            _add.AddProject(newTitle, newDescription, techList);
+
             Assert.True(_driver.PageSource.Contains(newTitle));
             Assert.True(_driver.PageSource.Contains("Java, JavaScript"));
         }
@@ -104,11 +104,11 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            AddProject_TestsPageObject.PrepareDB();
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
             _driver.Url = Configuration.WebApiUrl;
-            Add = new AddProject_TestsPageObject(_driver);
-            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
+            _add = new AddProject_TestsPageObject(_driver);
+            _add.PrepareDB();
+            _add.ClickCookieConsent();
         }
 
         [TearDown]

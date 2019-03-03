@@ -2,14 +2,10 @@
 
 namespace CodeTogetherNGE2E_Tests
 {
-    internal class Details_PageObject
+    internal class Details_PageObject : Navigation_PageObject
     {
-        private IWebDriver _driver;
-
-        public Details_PageObject(IWebDriver driver)
-        {
-            this._driver = driver;
-        }
+        public Details_PageObject(IWebDriver driver) : base(driver)
+        { }
 
         public string GetTitle()
         {

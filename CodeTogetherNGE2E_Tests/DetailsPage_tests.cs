@@ -5,6 +5,7 @@ using System;
 
 namespace CodeTogetherNGE2E_Tests
 {
+    [TestFixture]
     internal class DetailsPage_Tests
     {
         private IWebDriver _driver;
@@ -61,17 +62,16 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            AddProject_TestsPageObject.PrepareDB();
-
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
             _driver.Url = Configuration.WebApiUrl;
 
             _details = new Details_PageObject(_driver);
 
             _grid = new Grid_PageObject(_driver);
+            _grid.PrepareDB();
 
-            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+            _grid.ClickCookieConsent();
+            _grid.GoToProjectsGrid();
         }
 
         [TearDown]

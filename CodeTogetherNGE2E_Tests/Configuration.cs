@@ -1,16 +1,15 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    static class Configuration
+    internal static class Configuration
     {
-        public static string WebApiUrl {
-            get {
+        public static string WebApiUrl
+        {
+            get
+            {
                 var url= TestContext.Parameters["webAppUrl"];
                 if (string.IsNullOrWhiteSpace(url))
                     return "https://localhost:44362/";

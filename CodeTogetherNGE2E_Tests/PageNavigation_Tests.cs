@@ -7,46 +7,42 @@ namespace CodeTogetherNGE2E_Tests
     public class Navigation_Tests
     {
         private IWebDriver _driver;
-        private AddProject_TestsPageObject Add;
+        private Navigation_PageObject _navigate;
+
+        [Test]
+        public void NavigationTests()
+        {
+            _navigate.GoToHome();
+            Assert.True(_navigate.IsOnPage_Home());
+
+            _navigate.GoToAbout();
+            Assert.True(_navigate.IsOnPage_About());
+
+            _navigate.GoToContact();
+            Assert.True(_navigate.IsOnPage_Contact());
+
+            _navigate.GoToProjectsGrid();
+            Assert.True(_navigate.IsOnPage_ProjectsGrid());
+
+            _navigate.GoToRegister();
+            Assert.True(_navigate.IsOnPage_Register());
+
+            _navigate.GoToLogin();
+            Assert.True(_navigate.IsOnPage_Login());
+
+            _navigate.LoginUser();
+
+            _navigate.GoToAddProject();
+            Assert.True(_navigate.IsOnPage_AddProject());
+        }
 
         [SetUp]
         public void SeleniumSetup()
         {
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
-
             _driver.Url = Configuration.WebApiUrl;
-
-            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
-
-            Add = new AddProject_TestsPageObject(_driver);
-            
-        }
-
-        [Test]
-        public void NavigationTests()
-        {
-            var Home = _driver.FindElement(By.Id("HomeTitle"));
-            Assert.True(Home.Text == ("This side is under construction."));
-
-            _driver.FindElement(By.Id("About")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("AboutPage")));
-
-            _driver.FindElement(By.Id("Contact")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("ContactPage")));
-
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("ProjectGridPage")));
-
-            _driver.FindElement(By.Id("Register")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("Input_ConfirmPassword")));
-
-            _driver.FindElement(By.Id("Login")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("Input_RememberMe")));
-
-            Add.LoginUser();
-
-            _driver.FindElement(By.Id("AddProject")).Click();
-            Assert.NotNull(_driver.FindElement(By.Id("Title")));
+            _navigate = new Navigation_PageObject(_driver);
+            _navigate.ClickCookieConsent();
         }
 
         [TearDown]

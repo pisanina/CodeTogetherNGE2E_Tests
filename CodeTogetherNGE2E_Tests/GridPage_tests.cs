@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace CodeTogetherNGE2E_Tests
 {
+    [TestFixture]
     internal class GridPage_Tests
     {
         private IWebDriver _driver;
@@ -74,8 +75,6 @@ namespace CodeTogetherNGE2E_Tests
 
             _grid.Search(toSearch);
 
-            
-           
             Assert.True(_grid.ProjectCount() == 1);
             Assert.True(_grid.IsProjectDisplayed(toSearch));
             Assert.True(_grid.IsTechnologiesDisplayed(5, "Assembly, C++, Java, JavaScript"));
@@ -91,12 +90,12 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            AddProject_TestsPageObject.PrepareDB();
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
             _driver.Url = Configuration.WebApiUrl;
             _grid = new Grid_PageObject(_driver);
-            _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
-            _driver.FindElement(By.Id("ProjectsGrid")).Click();
+            _grid.PrepareDB();
+            _grid.ClickCookieConsent();
+            _grid.GoToProjectsGrid();
         }
 
         [TearDown]
