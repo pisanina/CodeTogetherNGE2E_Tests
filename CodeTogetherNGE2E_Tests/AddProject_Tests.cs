@@ -8,22 +8,23 @@ namespace CodeTogetherNGE2E_Tests
     public class AddProject_Tests
     {
         private IWebDriver _driver;
-        private AddProject_TestsPageObject _add;
+        private AddProject_PageObject _add;
+        private Grid_PageObject _grid;
 
         [TestCase("Test for adding new Project Title", "Test Description 1 of Project")]
         [TestCase("Test for adding Project Title in Polish żółtość", "Test Description 2 of Project")]
         [TestCase("Test for adding Project Title in Japanese こんにちは", "Test Description 3 of Project")]
         [TestCase("Test Title", "Test for adding Description in Polish żółtość")]
         [TestCase("Test Title", "Test for adding Description in Japanese こんにちは")]
-        public void AddProjectTest(string NewTitle, string NewDescription)
+        public void AddProjectTest(string newTitle, string newDescription)
         {
-            Assert.False(_driver.PageSource.Contains(NewTitle));
-            Assert.False(_driver.PageSource.Contains(NewDescription));
+            Assert.False(_grid.IsProjectDisplayed(newTitle));
+            Assert.False(_grid.IsProjectDisplayed(newDescription));
 
-            _add.AddProject(NewTitle, NewDescription);
-
-            Assert.True(_driver.PageSource.Contains(NewTitle));
-            Assert.True(_driver.PageSource.Contains(NewDescription));
+            _add.AddProject(newTitle, newDescription);
+           
+            Assert.True(_grid.IsProjectDisplayed(newTitle));
+            Assert.True(_grid.IsProjectDisplayed(newDescription));
         }
 
         [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection 1", "',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--", "Test Title for SQL Injection 1")]
@@ -34,55 +35,55 @@ namespace CodeTogetherNGE2E_Tests
         [TestCase("Test Description for JavaScript Injection", "'); <script>alert('BUM!');</script>'--", "'); &lt;script&gt;alert('BUM!');&lt;/script&gt;'--", "Test Description for JavaScript Injection")]
         [TestCase("',''); <h1>Surprise</h1>'--'','", "Test Title for HTML Injection", "',''); &lt;h1&gt;Surprise&lt;/h1&gt;'--'','", "Test Title for HTML Injection")]
         [TestCase("Test Description for HTML Injection", "'); <h1>Surprise</h1>'--'", "'); &lt;h1&gt;Surprise&lt;/h1&gt;'--'", "Test Description for HTML Injection")]
-        public void AddProjectInjectionTest(string NewTitle, string NewDescription, string Injection, string TitleORdescription)
+        public void AddProjectInjectionTest(string newTitle, string newDescription, string injection, string titleORdescription)
         {
-            Assert.False(_driver.PageSource.Contains(NewTitle));
-            Assert.False(_driver.PageSource.Contains(NewDescription));
+            Assert.False(_grid.IsProjectDisplayed(newTitle));
+            Assert.False(_grid.IsProjectDisplayed(newDescription));
 
-            _add.AddProject(NewTitle, NewDescription);
+            _add.AddProject(newTitle, newDescription);
 
-            Assert.True(_driver.PageSource.Contains(Injection));
-            Assert.True(_driver.PageSource.Contains(TitleORdescription));
+            Assert.True(_grid.IsProjectDisplayed(injection));
+            Assert.True(_grid.IsProjectDisplayed(titleORdescription));
         }
 
         [TestCase("", "Test for adding empty Title", "Title has a minimum length of 3.")]
         [TestCase("AB", "Test for adding to short Title", "Title has a minimum length of 3.")]
         [TestCase("Test for adding empty Description", "", "Description has a minimum length of 20.")]
         [TestCase("Test for adding to short Desciption", "Short Description", "Description has a minimum length of 20.")]
-        public void AddProjectTooShort(string NewTitle, string NewDescription, string Error)
+        public void AddProjectTooShort(string newTitle, string newDescription, string error)
         {
-            Assert.False(_driver.PageSource.Contains(Error));
+            Assert.False(_add.ErrorDisplayed(error));
 
-            _add.AddProject(NewTitle, NewDescription);
+            _add.AddProject(newTitle, newDescription);
 
-            Assert.True(_driver.PageSource.Contains(Error));
+            Assert.True(_add.ErrorDisplayed(error));
         }
 
         [Test]
         public void AddProjectWithTooLongTitleAndDescription()
         {
-            string TooLongTitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+            string tooLongTitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-            string TooLongDescription = new string('+', 10).Replace("+", TooLongTitle);
+            string tooLongDescription = new string('+', 10).Replace("+", tooLongTitle);
 
-            Assert.False(_driver.PageSource.Contains("Title has a maximum length of 50."));
-            Assert.False(_driver.PageSource.Contains("Description has a maximum length of 1000."));
+            Assert.False(_add.ErrorDisplayed("Title has a maximum length of 50."));
+            Assert.False(_add.ErrorDisplayed("Description has a maximum length of 1000."));
 
-            _add.AddProject(TooLongTitle, TooLongDescription);
+            _add.AddProject(tooLongTitle, tooLongDescription);
 
-            Assert.True(_driver.PageSource.Contains("Title has a maximum length of 50."));
-            Assert.True(_driver.PageSource.Contains("Description has a maximum length of 1000."));
+            Assert.True(_add.ErrorDisplayed("Title has a maximum length of 50."));
+            Assert.True(_add.ErrorDisplayed("Description has a maximum length of 1000."));
         }
 
         [Test]
         public void AddProjectThatExist()
         {
-            Assert.False(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
+            Assert.False(_add.ErrorDisplayed("Sorry there is alredy project with that title"));
 
             _add.AddProject("Funny bunny", "Description for test project that exist");
 
-            Assert.True(_driver.PageSource.Contains("Sorry there is alredy project with that title"));
+            Assert.True(_add.ErrorDisplayed("Sorry there is alredy project with that title"));
         }
 
         [Test]
@@ -97,8 +98,8 @@ namespace CodeTogetherNGE2E_Tests
 
             _add.AddProject(newTitle, newDescription, techList);
 
-            Assert.True(_driver.PageSource.Contains(newTitle));
-            Assert.True(_driver.PageSource.Contains("Java, JavaScript"));
+            Assert.True(_grid.IsProjectDisplayed(newTitle));
+            Assert.True(_grid.IsProjectDisplayed("Java, JavaScript"));
         }
 
         [SetUp]
@@ -106,7 +107,8 @@ namespace CodeTogetherNGE2E_Tests
         {
             _driver = new ChromeDriver(Configuration.WebDriverLocation);
             _driver.Url = Configuration.WebApiUrl;
-            _add = new AddProject_TestsPageObject(_driver);
+            _add = new AddProject_PageObject(_driver);
+            _grid = new Grid_PageObject(_driver);
             _add.PrepareDB();
             _add.ClickCookieConsent();
         }

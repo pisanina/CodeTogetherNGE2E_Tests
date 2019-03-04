@@ -59,7 +59,7 @@ namespace CodeTogetherNGE2E_Tests
 
         public bool IsOnPage_About()
         {
-            return _driver.FindElement(By.Id("AboutPage")).Text == ("CodeTogetherNG is a project that connects programers who want to learn how to work in teams");
+            return _driver.FindElement(By.Id("AboutPage")).Text == ("CodeTogetherNG is a project that connects programers who want to learn how to develop applications in teams.");
         }
 
         public bool IsOnPage_Contact()

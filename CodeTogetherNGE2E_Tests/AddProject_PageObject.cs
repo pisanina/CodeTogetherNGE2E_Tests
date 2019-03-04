@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    public class AddProject_TestsPageObject : Navigation_PageObject
+    public class AddProject_PageObject : Navigation_PageObject
     {
-        public AddProject_TestsPageObject(IWebDriver driver) : base(driver)
+        public AddProject_PageObject(IWebDriver driver) : base(driver)
         { }
 
         public void AddProject(string title, string description, IEnumerable<int> techIdList)
@@ -28,6 +28,11 @@ namespace CodeTogetherNGE2E_Tests
         {
             IEnumerable<int> techIdList = new List<int>();
             AddProject(title, description, techIdList);
+        }
+
+        public bool ErrorDisplayed(string error)
+        {
+            return _driver.PageSource.Contains(error);
         }
     }
 }
