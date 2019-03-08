@@ -29,7 +29,13 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsTechnologiesDisplayed(int projectId, string technologies)
         {
             return _driver.FindElement(By.Id("project_" + projectId)).
-                FindElement(By.CssSelector("small")).Text == technologies;
+                     FindElement(By.CssSelector("small")).Text == technologies;
+        }
+
+        public bool IsNewMembersDisplayed(int projectId)
+        {
+          return  _driver.FindElement(By.Id("project_" + projectId)).
+                     FindElement(By.Id("newMembers-icon")).Displayed;
         }
 
         public void SelectTechnology(int techId)
@@ -38,7 +44,19 @@ namespace CodeTogetherNGE2E_Tests
             TechList.FindElement(By.CssSelector("option[value=\"" + techId + "\"]")).Click();
         }
 
-        public int ProjectCount()
+        public void SelectProjectState(int? stateId)
+        {
+            var ProjectStateList = _driver.FindElement(By.Id("State"));
+            ProjectStateList.FindElement(By.CssSelector("option[value=\"" + stateId + "\"]")).Click();
+        }
+
+        public void SelectNewMembers(string newMembers)
+        {
+            var newMembersList = _driver.FindElement(By.Id("NewMembers"));
+            newMembersList.FindElement(By.CssSelector("option[value=\"" + newMembers + "\"]")).Click();
+        }
+
+        public int GetProjectCount()
         {
             return _driver.FindElements(By.CssSelector(".list-group-item")).Count;
         }
@@ -56,6 +74,11 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsSearchInputRequired()
         {
             return _driver.FindElement(By.Id("SearchInput")).GetAttribute("required") == "true";
+        }
+
+        public void ClickButtonPleaseTryAgain()
+        {
+            _driver.FindElement(By.Id("Please")).Click();
         }
     }
 }

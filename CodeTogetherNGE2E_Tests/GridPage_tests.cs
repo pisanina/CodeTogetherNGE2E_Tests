@@ -57,6 +57,15 @@ namespace CodeTogetherNGE2E_Tests
         }
 
         [Test]
+        public void SearchProjectMinLenghtWithOtherParameters()
+        {
+            _grid.SelectNewMembers("true");
+            _grid.Search("");
+            Assert.True(_grid.GetProjectCount() == 1);
+            Assert.True(_grid.IsProjectDisplayed("Funny bunny"));
+        }
+
+        [Test]
         public void SearchProjectWithTechnologies()
         {
             string toSearch = "Project";
@@ -75,7 +84,7 @@ namespace CodeTogetherNGE2E_Tests
 
             _grid.Search(toSearch);
 
-            Assert.True(_grid.ProjectCount() == 1);
+            Assert.True(_grid.GetProjectCount() == 1);
             Assert.True(_grid.IsProjectDisplayed(toSearch));
             Assert.True(_grid.IsTechnologiesDisplayed(5, "Assembly, C++, Java, JavaScript"));
         }
@@ -85,6 +94,33 @@ namespace CodeTogetherNGE2E_Tests
         {
             Assert.True(_grid.IsProjectDisplayed("Project with Two Tech"));
             Assert.True(_grid.IsTechnologiesDisplayed(6, "Java, JavaScript"));
+        }
+
+        [Test]
+        public void SerchOnlyByProjectState()
+        {
+            _grid.SelectProjectState(2);
+            _grid.SearchSubmit();
+            Assert.True(_grid.GetProjectCount() == 1);
+            Assert.True(_grid.IsProjectDisplayed("FirstProject"));
+        }
+
+        [Test]
+        public void SerchOnlyByNewMembers()
+        {
+            _grid.SelectNewMembers("true");
+            _grid.SearchSubmit();
+            Assert.True(_grid.GetProjectCount() == 1);
+            Assert.True(_grid.IsProjectDisplayed("Funny bunny"));
+        }
+
+        [Test]
+        public void SearchProjectThatNoExist()
+        {
+            _grid.Search("Project that not exist");
+            Assert.True(_grid.IsOnEmptyProjectListAfterSearch());
+            _grid.ClickButtonPleaseTryAgain();
+            Assert.True(_grid.IsOnPage_ProjectsGrid());
         }
 
         [SetUp]

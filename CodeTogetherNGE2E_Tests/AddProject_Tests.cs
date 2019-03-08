@@ -96,9 +96,26 @@ namespace CodeTogetherNGE2E_Tests
             techList.Add(6);
             techList.Add(7);
 
-            _add.AddProject(newTitle, newDescription, techList);
+            _add.AddProject(newTitle, newDescription, techList, false);
 
             Assert.True(_grid.IsProjectDisplayed(newTitle));
+            Assert.True(_grid.IsProjectDisplayed("Java, JavaScript"));
+        }
+
+        [Test]
+        public void AddProjectWithNewMembers()
+        {
+            string newTitle = "Test77 for adding project with tech";
+            string newDescription = newTitle;
+
+            List<int> techList = new List<int>();
+            techList.Add(6);
+            techList.Add(7);
+
+            _add.AddProject(newTitle, newDescription, techList, true);
+
+            Assert.True(_grid.IsProjectDisplayed(newTitle));
+            Assert.True(_grid.IsNewMembersDisplayed(7));
             Assert.True(_grid.IsProjectDisplayed("Java, JavaScript"));
         }
 

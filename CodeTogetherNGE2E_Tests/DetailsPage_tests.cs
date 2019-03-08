@@ -59,6 +59,54 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_details.IsTechnologySelected(18));
         }
 
+        [Test]
+        public void EditDetailView() 
+        {
+
+            _grid.LoginUser();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.True(_details.GetTitle() == "FirstProject");
+            Assert.True(_details.GetDescription() == "Our first project will be SUPRISE Hello World");
+            Assert.True(_details.GetNewMembers() == false);
+            Assert.True(_details.GetProjectState() == 2);
+            Assert.True(_details.GetSelectedTechnologies().Count == 0);
+
+            _details.EditTitle("FirstProject2");
+            _details.EditDescription("Our first project will be SUPRISE Hello World - changed");
+            _details.EditNewMembers(true);
+            _details.SelectTechnology(1);
+            _details.SelectProjectState(1);
+
+            _details.EditSave();
+
+            Assert.True(_grid.IsOnPage_ProjectsGrid());
+            _grid.ClickTheFirstProject();
+
+            Assert.True(_details.GetTitle() == "FirstProject2");
+            Assert.True(_details.GetDescription() == "Our first project will be SUPRISE Hello World - changed");
+            Assert.True(_details.GetNewMembers() == true);
+            Assert.True(_details.GetProjectState() == 1);
+            Assert.True(_details.GetSelectedTechnologies().Count == 1);
+        }
+        
+        [TestCase("true")]
+        [TestCase("false")]
+        public void EditDetailViewByNotOwner(string logged)
+        {
+            if (logged=="true") { _grid.LoginCoder(); }
+           
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.False(_details.IsTitleEditable());
+            Assert.False(_details.IsDescriptionEditable());
+            Assert.False(_details.IsNewMembersEditable());
+            Assert.False(_details.IsTechnologyListEditable());
+            Assert.False(_details.IsProjectStateEditable());
+            Assert.False(_details.IsSaveButtonOnPage());
+        }
+
+       
         [SetUp]
         public void SeleniumSetup()
         {
