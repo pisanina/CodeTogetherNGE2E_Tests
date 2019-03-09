@@ -67,7 +67,9 @@ namespace CodeTogetherNGE2E_Tests
             _grid.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
             Assert.True(_details.GetTitle() == "FirstProject");
+            Assert.False(_details.IsOwnerNameEditable());
             Assert.True(_details.GetDescription() == "Our first project will be SUPRISE Hello World");
+            Assert.False(_details.IsCreationDateEditable());
             Assert.True(_details.GetNewMembers() == false);
             Assert.True(_details.GetProjectState() == 2);
             Assert.True(_details.GetSelectedTechnologies().Count == 0);
@@ -99,11 +101,49 @@ namespace CodeTogetherNGE2E_Tests
             _grid.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
             Assert.False(_details.IsTitleEditable());
+            Assert.False(_details.IsOwnerNameEditable());
             Assert.False(_details.IsDescriptionEditable());
+            Assert.False(_details.IsCreationDateEditable());
             Assert.False(_details.IsNewMembersEditable());
             Assert.False(_details.IsTechnologyListEditable());
             Assert.False(_details.IsProjectStateEditable());
             Assert.False(_details.IsSaveButtonOnPage());
+        }
+
+        [Test]
+        public void EditDetailsWrongDataInput()
+        {
+            _grid.LoginUser();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+
+            Assert.True(_details.GetTitle() == "FirstProject");
+            Assert.True(_details.GetDescription() == "Our first project will be SUPRISE Hello World");
+
+            string title = "";
+            string description = "";
+            string error = "Please fill this field";
+
+            _details.EditTitle(title);
+            _details.EditSave();
+            _details.ErrorDisplayed(error);
+
+            _details.EditDescription(description);
+            _details.EditSave();
+            _details.ErrorDisplayed(error);
+
+            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+            description = new string('+', 10).Replace("+", title);
+
+            _details.EditTitle(title);
+            _details.EditSave();
+            _details.ErrorDisplayed(error);
+
+            _details.EditDescription(description);
+            _details.EditSave();
+            _details.ErrorDisplayed(error);
         }
 
        

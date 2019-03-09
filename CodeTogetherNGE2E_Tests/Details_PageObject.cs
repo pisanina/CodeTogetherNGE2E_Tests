@@ -103,9 +103,24 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Save")).Click();
         }
 
+        public bool ErrorDisplayed(string error)
+        {
+            return _driver.PageSource.Contains(error);
+        }
+
         public bool IsTitleEditable()
         {
             return _driver.FindElement(By.Id("Title")).GetAttribute("ReadOnly")=="false";
+        }
+
+        public bool IsCreationDateEditable()
+        {
+            return _driver.FindElement(By.Id("CreationDate")).GetAttribute("ReadOnly") == "false";
+        }
+
+        public bool IsOwnerNameEditable()
+        {
+            return _driver.FindElement(By.Id("Owner")).GetAttribute("ReadOnly") == "false";
         }
 
         public bool IsDescriptionEditable()

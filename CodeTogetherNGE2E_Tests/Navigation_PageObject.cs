@@ -37,6 +37,11 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("ProjectsGrid")).Click();
         }
 
+        public void GoToTechnologyList()
+        {
+            _driver.FindElement(By.Id("TechnologiesList")).Click();
+        }
+
         public void GoToRegister()
         {
             _driver.FindElement(By.Id("Register")).Click();
@@ -70,6 +75,11 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsOnPage_ProjectsGrid()
         {
             return _driver.FindElement(By.Id("SearchInput")).GetAttribute("name") == "Search";
+        }
+
+        public bool IsOnPage_TechnologyList()
+        {
+            return _driver.FindElement(By.Id("TechTable")).Displayed;
         }
 
         public bool IsOnPage_Register()
@@ -121,6 +131,7 @@ namespace CodeTogetherNGE2E_Tests
                 SQLConnect.Open();
 
                 SqlCommand ClearDB = new SqlCommand(
+                    "Delete from ProjectMember " +
                     "Delete From ProjectTechnology " +
                     "Delete From Project " +
                     "DBCC CHECKIDENT('Project', RESEED, 0) "+

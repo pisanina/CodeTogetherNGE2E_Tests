@@ -24,10 +24,16 @@ namespace CodeTogetherNGE2E_Tests
             _navigate.GoToProjectsGrid();
             Assert.True(_navigate.IsOnPage_ProjectsGrid());
 
+            _navigate.GoToTechnologyList();
+            Assert.True(_navigate.IsOnPage_TechnologyList());
+
             _navigate.GoToRegister();
             Assert.True(_navigate.IsOnPage_Register());
 
             _navigate.GoToLogin();
+            Assert.True(_navigate.IsOnPage_Login());
+
+            _navigate.GoToAddProject();
             Assert.True(_navigate.IsOnPage_Login());
 
             _navigate.LoginUser();
