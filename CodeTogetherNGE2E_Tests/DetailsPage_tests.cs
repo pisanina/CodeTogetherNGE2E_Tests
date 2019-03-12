@@ -11,6 +11,7 @@ namespace CodeTogetherNGE2E_Tests
         private IWebDriver _driver;
         private Details_PageObject _details;
         private Grid_PageObject _grid;
+        private Requests_PageObject _request;
 
         [Test]
         public void RedirectToDetailView()
@@ -63,7 +64,7 @@ namespace CodeTogetherNGE2E_Tests
         public void EditDetailView() 
         {
 
-            _grid.LoginUser();
+            _grid.LoginOwner();
             _grid.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
             Assert.True(_details.GetTitle() == "FirstProject");
@@ -113,7 +114,7 @@ namespace CodeTogetherNGE2E_Tests
         [Test]
         public void EditDetailsWrongDataInput()
         {
-            _grid.LoginUser();
+            _grid.LoginOwner();
             _grid.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
 
@@ -146,7 +147,47 @@ namespace CodeTogetherNGE2E_Tests
             _details.ErrorDisplayed(error);
         }
 
-       
+        [Test]
+        public void RequestAccepted()
+        {
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.EditMessage("I want to join");
+            _details.Logout();
+            _grid.LoginOwner();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.ClickShowRequestsButton();
+            Assert.True(_request.CheckMessage(1,"I want to join"));
+            _request.AcceptButtonClick();
+            _request.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.True(_details.GetMembers().Trim() == "coder@a.com");
+            Assert.False(_details.IsShowRequestsButtonOnPage());
+        }
+
+        [Test]
+        public void RequestDeclined()
+        {
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.EditMessage("I want to join");
+            _details.Logout();
+            _grid.LoginOwner();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.ClickShowRequestsButton();
+            Assert.True(_request.CheckMessage(1, "I want to join"));
+            _request.DeclineButtonClick();
+            _request.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.False(_details.GetMembers().Trim() == "coder@a.com");
+            Assert.False(_details.IsShowRequestsButtonOnPage());
+        }
+
+
         [SetUp]
         public void SeleniumSetup()
         {
@@ -157,6 +198,8 @@ namespace CodeTogetherNGE2E_Tests
 
             _grid = new Grid_PageObject(_driver);
             _grid.PrepareDB();
+
+            _request = new Requests_PageObject(_driver);
 
             _grid.ClickCookieConsent();
             _grid.GoToProjectsGrid();

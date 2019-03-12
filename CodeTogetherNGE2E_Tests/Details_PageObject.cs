@@ -53,6 +53,11 @@ namespace CodeTogetherNGE2E_Tests
             return ListOfTech;
         }
 
+        public string GetMembers()
+        {
+           return _driver.FindElement(By.Id("Members")).GetAttribute("value");
+        }
+
         public bool IsOnDetailsView()
         {
             return _driver.FindElements(By.Id("SearchInput")).Count == 0
@@ -103,6 +108,17 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Save")).Click();
         }
 
+        public void EditMessage(string message)
+        {
+            _driver.FindElement(By.Id("RequestMessage")).SendKeys(message);
+            _driver.FindElement(By.Id("Send")).Click();
+        }
+
+        public void ClickShowRequestsButton()
+        {
+            _driver.FindElement(By.Id("ShowRequest")).Click();
+        }
+        
         public bool ErrorDisplayed(string error)
         {
             return _driver.PageSource.Contains(error);
@@ -154,6 +170,11 @@ namespace CodeTogetherNGE2E_Tests
             {
                 return false;
             }
+        }
+
+        public bool IsShowRequestsButtonOnPage()
+        {
+           return  _driver.FindElements(By.Id("ShowRequest")).Count==1; 
         }
 
     }

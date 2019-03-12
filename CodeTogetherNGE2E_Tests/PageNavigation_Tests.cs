@@ -36,7 +36,7 @@ namespace CodeTogetherNGE2E_Tests
             _navigate.GoToAddProject();
             Assert.True(_navigate.IsOnPage_Login());
 
-            _navigate.LoginUser();
+            _navigate.LoginOwner();
 
             _navigate.GoToAddProject();
             Assert.True(_navigate.IsOnPage_AddProject());

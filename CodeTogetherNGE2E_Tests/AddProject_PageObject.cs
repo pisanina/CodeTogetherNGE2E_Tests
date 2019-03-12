@@ -10,7 +10,7 @@ namespace CodeTogetherNGE2E_Tests
 
         public void AddProject(string title, string description, IEnumerable<int> techIdList, bool members = false)
         {
-            LoginUser();
+            LoginOwner();
             _driver.FindElement(By.Id("AddProject")).Click();
             _driver.FindElement(By.Id("Title")).SendKeys(title);
             _driver.FindElement(By.Id("Description")).SendKeys(description);

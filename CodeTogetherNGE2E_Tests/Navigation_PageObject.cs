@@ -107,7 +107,7 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.XPath("//*[@id=\"cookieConsent\"]/div/div[2]/div/button")).Click();
         }
 
-        public void LoginUser()
+        public void LoginOwner()
         {
             _driver.FindElement(By.Id("Login")).Click();
             _driver.FindElement(By.Id("Input_Email")).SendKeys("TestUser@a.com");
@@ -121,6 +121,11 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Input_Email")).SendKeys("Coder@a.com");
             _driver.FindElement(By.Id("Input_Password")).SendKeys("Qwedsa11!1");
             _driver.FindElement(By.Id("Input_Password")).SendKeys(Keys.Enter);
+        }
+
+        public void Logout()
+        {
+            _driver.FindElement(By.XPath("//*[@id=\"logoutForm\"]/ul/li[2]/button")).Click();
         }
 
         public void PrepareDB()
