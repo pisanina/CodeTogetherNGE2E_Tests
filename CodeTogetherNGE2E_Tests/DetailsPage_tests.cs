@@ -210,6 +210,51 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_details.GetReqestStatusMessage() == "Your request is pending");
         }
 
+        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--")]
+        [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','")]
+        [TestCase("',''); <script>alert('BUM!');</script>'")]
+        [TestCase("',''); <h1>Surprise</h1>'--'','")]
+        public void SearchProjectInjectionTest(string toSearch)
+        {
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+
+            _details.EditMessage(toSearch);
+
+            _details.Logout();
+            _grid.LoginOwner();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.ClickShowRequestsButton();
+            Assert.True(_request.CheckMessage(1, toSearch));
+        }
+
+
+        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--")]
+        [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','")]
+        [TestCase("',''); <script>alert('BUM!');</script>'")]
+        [TestCase("',''); <h1>Surprise</h1>'--'','")]
+        public void EditDetailViewInjectionTest(string injection)
+        {
+            _grid.LoginOwner();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.True(_details.GetTitle() == "FirstProject");
+            Assert.True(_details.GetDescription() == "Our first project will be SUPRISE Hello World");
+
+            _details.EditTitle(injection);
+            _details.EditDescription(injection);
+           
+            _details.EditSave();
+
+            Assert.True(_grid.IsOnPage_ProjectsGrid());
+            _grid.ClickTheFirstProject();
+
+            Assert.True(_details.GetTitle() == injection);
+            Assert.True(_details.GetDescription() == injection);
+        }
+
         [Test]
         [SetUp]
         public void SeleniumSetup()
@@ -218,11 +263,10 @@ namespace CodeTogetherNGE2E_Tests
             _driver.Url = Configuration.WebApiUrl;
 
             _details = new Details_PageObject(_driver);
+            _request = new Requests_PageObject(_driver);
 
             _grid = new Grid_PageObject(_driver);
             _grid.PrepareDB();
-
-            _request = new Requests_PageObject(_driver);
 
             _grid.ClickCookieConsent();
             _grid.GoToProjectsGrid();

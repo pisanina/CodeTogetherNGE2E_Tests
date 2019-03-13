@@ -27,6 +27,20 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_grid.IsProjectDisplayed(toSearch));
         }
 
+        [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--")] 
+        [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','")]  
+        [TestCase("',''); <script>alert('BUM!');</script>'")]   
+        [TestCase("',''); <h1>Surprise</h1>'--'','")] 
+        public void SearchProjectInjectionTest(string toSearch)
+        {
+            Assert.True(_grid.IsProjectDisplayed("Funny"));
+           
+            _grid.Search(toSearch);
+
+            Assert.True(_grid.IsOnEmptyProjectListAfterSearch());
+        }
+
+
         [Test]
         public void SearchProjectToolong()
         {
