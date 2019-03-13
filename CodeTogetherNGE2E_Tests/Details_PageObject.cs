@@ -177,5 +177,15 @@ namespace CodeTogetherNGE2E_Tests
            return  _driver.FindElements(By.Id("ShowRequest")).Count==1; 
         }
 
+        public bool IsSendButtonOnPage()
+        {
+            return _driver.FindElements(By.Id("Send")).Count == 1;
+        }
+
+        public string GetReqestStatusMessage()
+        {
+            return _driver.FindElement(By.Id("requestState")).Text;
+        }
+
     }
 }

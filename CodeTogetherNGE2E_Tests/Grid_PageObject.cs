@@ -26,6 +26,11 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.XPath("/html/body/div/div/div[1]/a")).Click();
         }
 
+        public void ClickTheSecondProject()
+        {
+            _driver.FindElement(By.XPath("/html/body/div/div/div[2]/a")).Click();
+        }
+
         public bool IsTechnologiesDisplayed(int projectId, string technologies)
         {
             return _driver.FindElement(By.Id("project_" + projectId)).

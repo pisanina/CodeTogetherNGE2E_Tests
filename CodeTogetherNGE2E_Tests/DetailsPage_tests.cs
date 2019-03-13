@@ -61,9 +61,8 @@ namespace CodeTogetherNGE2E_Tests
         }
 
         [Test]
-        public void EditDetailView() 
+        public void EditDetailView()
         {
-
             _grid.LoginOwner();
             _grid.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
@@ -92,13 +91,13 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_details.GetProjectState() == 1);
             Assert.True(_details.GetSelectedTechnologies().Count == 1);
         }
-        
+
         [TestCase("true")]
         [TestCase("false")]
         public void EditDetailViewByNotOwner(string logged)
         {
-            if (logged=="true") { _grid.LoginCoder(); }
-           
+            if (logged == "true") { _grid.LoginCoder(); }
+
             _grid.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
             Assert.False(_details.IsTitleEditable());
@@ -152,19 +151,25 @@ namespace CodeTogetherNGE2E_Tests
         {
             _grid.LoginCoder();
             _grid.GoToProjectsGrid();
-            _grid.ClickTheFirstProject();
+            _grid.ClickTheSecondProject();
             _details.EditMessage("I want to join");
             _details.Logout();
             _grid.LoginOwner();
             _grid.GoToProjectsGrid();
-            _grid.ClickTheFirstProject();
+            _grid.ClickTheSecondProject();
             _details.ClickShowRequestsButton();
-            Assert.True(_request.CheckMessage(1,"I want to join"));
+            Assert.True(_request.CheckMessage(2, "I want to join"));
             _request.AcceptButtonClick();
             _request.GoToProjectsGrid();
-            _grid.ClickTheFirstProject();
+            _grid.ClickTheSecondProject();
             Assert.True(_details.GetMembers().Trim() == "coder@a.com");
             Assert.False(_details.IsShowRequestsButtonOnPage());
+            _details.Logout();
+
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheSecondProject();
+            Assert.False(_details.IsSendButtonOnPage());
         }
 
         [Test]
@@ -185,9 +190,27 @@ namespace CodeTogetherNGE2E_Tests
             _grid.ClickTheFirstProject();
             Assert.False(_details.GetMembers().Trim() == "coder@a.com");
             Assert.False(_details.IsShowRequestsButtonOnPage());
+            _details.Logout();
+
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.True(_details.GetReqestStatusMessage().Contains("Your unable to send a join request until"));
         }
 
+        [Test]
+        public void ReqestIsPendingMessage()
+        {
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.EditMessage("I want to join");
+            _grid.ClickTheFirstProject();
 
+            Assert.True(_details.GetReqestStatusMessage() == "Your request is pending");
+        }
+
+        [Test]
         [SetUp]
         public void SeleniumSetup()
         {

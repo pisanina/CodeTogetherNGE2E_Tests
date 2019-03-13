@@ -166,7 +166,9 @@ namespace CodeTogetherNGE2E_Tests
                     "('Test for adding Project with four Tech', 'Test for adding Project with four Technologies', @UId, 0, 1)," +
                     "('Project with Two Tech', 'Project with Two Tech (Test)', @UId, 0, 1) "
                     +
-                    "Insert Into ProjectTechnology Values(5,2),(5, 4),(5, 6),(5, 7),(6, 6),(6, 7);", SQLConnect);
+                    "Insert Into ProjectTechnology Values(5,2),(5, 4),(5, 6),(5, 7),(6, 6),(6, 7);" +
+                    "INSERT INTO ProjectMember (ProjectId,MemberId,MessageDate,Message,AddMember) VALUES " +
+                    "(1,'fd4d0e37-0731-4b55-9e7c-b522978a63cb','2019-02-02','Message',0)", SQLConnect);
 
                 {
                     ClearDB.ExecuteNonQuery();
