@@ -210,6 +210,31 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_details.GetReqestStatusMessage() == "Your request is pending");
         }
 
+        [Test]
+        public void DeleteProject()
+        {
+            _grid.LoginOwner();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.ClickDeleteButton();
+            Assert.True(_grid.GetProjectCount() == 5);
+            _grid.Search("first");
+            Assert.True(_grid.IsOnEmptyProjectListAfterSearch());
+        }
+
+
+        [TestCase("true")]
+        [TestCase("false")]
+        public void DeleteProjectByNotOwner(string logged)
+        {
+            if (logged == "true") { _grid.LoginCoder(); }
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            Assert.False(_details.IsDeleteProjectButtonOnPage());
+        }
+
+
+
         [TestCase("',''); CREATE LOGIN Admin WITH PASSWORD = 'ABCD'--")]
         [TestCase("','');EXEC xp_cmdshell 'echo BUM >c:/A.txt'--'','")]
         [TestCase("',''); <script>alert('BUM!');</script>'")]

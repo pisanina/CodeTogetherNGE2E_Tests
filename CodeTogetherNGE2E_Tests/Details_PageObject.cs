@@ -118,7 +118,12 @@ namespace CodeTogetherNGE2E_Tests
         {
             _driver.FindElement(By.Id("ShowRequest")).Click();
         }
-        
+
+        public void ClickDeleteButton()
+        {
+            _driver.FindElement(By.Id("Delete")).Click();
+        }
+
         public bool ErrorDisplayed(string error)
         {
             return _driver.PageSource.Contains(error);
@@ -180,6 +185,11 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsSendButtonOnPage()
         {
             return _driver.FindElements(By.Id("Send")).Count == 1;
+        }
+
+        public bool IsDeleteProjectButtonOnPage()
+        {
+            return _driver.FindElements(By.Id("Delete")).Count == 1;
         }
 
         public string GetReqestStatusMessage()
