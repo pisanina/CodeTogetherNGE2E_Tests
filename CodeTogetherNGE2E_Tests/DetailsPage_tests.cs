@@ -162,7 +162,7 @@ namespace CodeTogetherNGE2E_Tests
             _request.AcceptButtonClick();
             _request.GoToProjectsGrid();
             _grid.ClickTheSecondProject();
-            Assert.True(_details.GetMembers().Trim() == "coder@a.com");
+            Assert.True(_details.GetMembers().Contains("coder@a.com"));
             Assert.False(_details.IsShowRequestsButtonOnPage());
             _details.Logout();
 
@@ -188,7 +188,7 @@ namespace CodeTogetherNGE2E_Tests
             _request.DeclineButtonClick();
             _request.GoToProjectsGrid();
             _grid.ClickTheFirstProject();
-            Assert.False(_details.GetMembers().Trim() == "coder@a.com");
+            Assert.False(_details.GetMembers().Contains("coder@a.com"));
             Assert.False(_details.IsShowRequestsButtonOnPage());
             _details.Logout();
 

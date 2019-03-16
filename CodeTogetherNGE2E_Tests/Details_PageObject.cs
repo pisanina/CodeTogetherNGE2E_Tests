@@ -21,7 +21,7 @@ namespace CodeTogetherNGE2E_Tests
 
         public string GetOwner()
         {
-            return _driver.FindElement(By.Id("Owner")).GetAttribute("value");
+            return _driver.FindElement(By.Id("Owner")).Text;
         }
 
         public string GetCreationDate()
@@ -53,9 +53,16 @@ namespace CodeTogetherNGE2E_Tests
             return ListOfTech;
         }
 
-        public string GetMembers()
+        public List<string> GetMembers()
         {
-           return _driver.FindElement(By.Id("Members")).GetAttribute("value");
+            var listOfMembers = new List<string>();
+            var elements = _driver.FindElements(By.CssSelector("a[id^='User_']"));
+
+            foreach (var item in elements)
+            {
+                listOfMembers.Add(item.Text);
+            }
+            return listOfMembers;
         }
 
         public bool IsOnDetailsView()
