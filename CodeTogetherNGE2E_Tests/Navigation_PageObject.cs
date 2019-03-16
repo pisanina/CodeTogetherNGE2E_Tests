@@ -137,6 +137,7 @@ namespace CodeTogetherNGE2E_Tests
 
                 SqlCommand ClearDB = new SqlCommand(
                     "Delete from ProjectMember " +
+                    "Delete from UserTechnologyLevel " +
                     "Delete From ProjectTechnology " +
                     "Delete From Project " +
                     "DBCC CHECKIDENT('Project', RESEED, 0) "+
