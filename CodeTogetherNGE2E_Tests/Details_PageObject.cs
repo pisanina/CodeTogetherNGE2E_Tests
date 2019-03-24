@@ -131,6 +131,17 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Delete")).Click();
         }
 
+        public void ClickOnOwnerLink()
+        {
+            _driver.FindElement(By.Id("Owner")).Click();
+        }
+
+
+        public void ClickOnMemberLink(string memberName)
+        {
+            _driver.FindElement(By.Id("User_"+memberName)).Click();
+        }
+
         public bool ErrorDisplayed(string error)
         {
             return _driver.PageSource.Contains(error);

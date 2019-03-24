@@ -281,6 +281,37 @@ namespace CodeTogetherNGE2E_Tests
         }
 
         [Test]
+        public void CheckOwnerLink()
+        {
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheFirstProject();
+            _details.ClickOnOwnerLink();
+
+            Assert.True(_details.IsOnPage_Profile());
+        }
+
+        [Test]
+        public void CheckMemberLink()
+        {
+            _grid.LoginCoder();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheSecondProject();
+            _details.EditMessage("I want to join");
+            _details.Logout();
+            _grid.LoginOwner();
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheSecondProject();
+            _details.ClickShowRequestsButton();
+            Assert.True(_request.CheckMessage(2, "I want to join"));
+            _request.AcceptButtonClick();
+            _request.GoToProjectsGrid();
+            _grid.ClickTheSecondProject();
+            _details.ClickOnMemberLink("coder@a.com");
+
+            Assert.True(_details.IsOnPage_Profile());
+        }
+
+        [Test]
         [SetUp]
         public void SeleniumSetup()
         {

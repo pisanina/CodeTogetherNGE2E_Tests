@@ -42,6 +42,11 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("TechnologiesList")).Click();
         }
 
+        public void GoToUsers()
+        {
+            _driver.FindElement(By.Id("UsersList")).Click();
+        }
+
         public void GoToRegister()
         {
             _driver.FindElement(By.Id("Register")).Click();
@@ -80,6 +85,16 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsOnPage_TechnologyList()
         {
             return _driver.FindElement(By.Id("TechTable")).Displayed;
+        }
+
+        public bool IsOnPage_Users()
+        {
+            return _driver.FindElement(By.Id("UsersListTable")).Displayed;
+        }
+
+        public bool IsOnPage_Profile()
+        {
+            return _driver.FindElement(By.Id("ProfileHeader")).Displayed;
         }
 
         public bool IsOnPage_Register()
