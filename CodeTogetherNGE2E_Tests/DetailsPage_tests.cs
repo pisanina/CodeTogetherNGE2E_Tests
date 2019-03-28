@@ -6,9 +6,8 @@ using System;
 namespace CodeTogetherNGE2E_Tests
 {
     [TestFixture]
-    internal class DetailsPage_Tests
+    internal class DetailsPage_Tests : TestsBase
     {
-        private IWebDriver _driver;
         private Details_PageObject _details;
         private Grid_PageObject _grid;
         private Requests_PageObject _request;
@@ -30,7 +29,7 @@ namespace CodeTogetherNGE2E_Tests
             Assert.True(_details.GetTitle() == "Funny bunny");
             Assert.True(_details.GetOwner() == "TestUser@a.com");
             Assert.True(_details.GetDescription() == "We want to create web aplication with many funny bunes");
-            Assert.True(_details.GetCreationDate() == DateTime.Now.ToString("dd/MM/yyy"));
+            Assert.True(_details.GetCreationDate() == new DateTime(2019, 2, 26).ToString("dd/MM/yyy"));
             Assert.True(_details.GetNewMembers());
         }
 
@@ -312,17 +311,31 @@ namespace CodeTogetherNGE2E_Tests
         }
 
         [Test]
+        public void CheckMemberIfPending()
+        {
+            _grid.GoToProjectsGrid();
+            _grid.ClickProject(3);
+            Assert.False(_details.CheckIsMember("newcoder@a.com"));
+        }
+
+        [Test]
+        public void CheckMemberIfAcceptedAfterRejecting()
+        {
+            _grid.GoToProjectsGrid();
+            _grid.ClickTheSecondProject();
+            Assert.True(_details.CheckIsMember("newcoder@a.com"));
+        }
+
+        [Test]
         [SetUp]
         public void SeleniumSetup()
         {
-            _driver = new ChromeDriver(Configuration.WebDriverLocation);
-            _driver.Url = Configuration.WebApiUrl;
+            base.Setup();
 
-            _details = new Details_PageObject(_driver);
-            _request = new Requests_PageObject(_driver);
+            _details = new Details_PageObject(driver);
+            _request = new Requests_PageObject(driver);
 
-            _grid = new Grid_PageObject(_driver);
-            _grid.PrepareDB();
+            _grid = new Grid_PageObject(driver);
 
             _grid.ClickCookieConsent();
             _grid.GoToProjectsGrid();
@@ -331,7 +344,7 @@ namespace CodeTogetherNGE2E_Tests
         [TearDown]
         public void DownSelenium()
         {
-            _driver.Quit();
+            driver.Quit();
         }
     }
 }

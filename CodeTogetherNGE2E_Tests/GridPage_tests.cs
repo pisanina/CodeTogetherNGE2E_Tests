@@ -7,9 +7,8 @@ using System.Collections.ObjectModel;
 namespace CodeTogetherNGE2E_Tests
 {
     [TestFixture]
-    internal class GridPage_Tests
+    internal class GridPage_Tests : TestsBase
     {
-        private IWebDriver _driver;
         private Grid_PageObject _grid;
 
         [TestCase("Project")] // Search in Title
@@ -140,10 +139,10 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            _driver = new ChromeDriver(Configuration.WebDriverLocation);
-            _driver.Url = Configuration.WebApiUrl;
-            _grid = new Grid_PageObject(_driver);
-            _grid.PrepareDB();
+
+            base.Setup();
+
+            _grid = new Grid_PageObject(driver);
             _grid.ClickCookieConsent();
             _grid.GoToProjectsGrid();
         }
@@ -151,7 +150,7 @@ namespace CodeTogetherNGE2E_Tests
         [TearDown]
         public void DownSelenium()
         {
-            _driver.Quit();
+            driver.Quit();
         }
 
         public bool searchTech(ReadOnlyCollection<IWebElement> project, string Technologies)

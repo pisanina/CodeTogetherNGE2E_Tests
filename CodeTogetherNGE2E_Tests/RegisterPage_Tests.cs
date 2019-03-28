@@ -4,9 +4,8 @@ using OpenQA.Selenium.Chrome;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    internal class RegisterPage_Tests
+    internal class RegisterPage_Tests: TestsBase
     {
-        private IWebDriver _driver;
         private Registration_PageObject _register;
 
         [TestCase("Test@a.com", "Pamięć.11")]
@@ -17,7 +16,7 @@ namespace CodeTogetherNGE2E_Tests
             _register.Insert_ConfirmPassword(password);
             _register.Click_Submit();
 
-            Assert.True(_driver.PageSource.Contains("Hello Test@a.com!"));
+            Assert.True(driver.PageSource.Contains("Hello Test@a.com!"));
         }
 
         [TestCase("@a.com", "The Email field is not a valid e-mail address")]
@@ -28,7 +27,7 @@ namespace CodeTogetherNGE2E_Tests
             _register.Insert_Email(email);
             _register.Insert_Password("");
 
-            Assert.True(_driver.PageSource.Contains(error));
+            Assert.True(driver.PageSource.Contains(error));
         }
 
         [TestCase("Simply password", "Passwords must have at least one digit ('0'-'9').")]
@@ -42,7 +41,7 @@ namespace CodeTogetherNGE2E_Tests
             _register.Insert_ConfirmPassword(password);
             _register.Click_Submit();
 
-            Assert.True(_driver.PageSource.Contains(error));
+            Assert.True(driver.PageSource.Contains(error));
         }
 
         [Test]
@@ -53,16 +52,16 @@ namespace CodeTogetherNGE2E_Tests
             _register.Insert_ConfirmPassword("Password.123");
             _register.Click_Submit();
 
-            Assert.True(_driver.PageSource.Contains("User name 'TestUser@a.com' is already taken."));
+            Assert.True(driver.PageSource.Contains("User name 'TestUser@a.com' is already taken."));
         }
 
         [SetUp]
         public void SeleniumSetup()
         {
-            _driver = new ChromeDriver(Configuration.WebDriverLocation);
-            _driver.Url = Configuration.WebApiUrl;
-            _register = new Registration_PageObject(_driver);
-            _register.PrepareDB();
+            base.Setup();
+
+            _register = new Registration_PageObject(driver);
+
             _register.ClickCookieConsent();
             _register.GoToRegister();
         }
@@ -70,7 +69,7 @@ namespace CodeTogetherNGE2E_Tests
         [TearDown]
         public void DownSelenium()
         {
-            _driver.Quit();
+            driver.Quit();
         }
     }
 }

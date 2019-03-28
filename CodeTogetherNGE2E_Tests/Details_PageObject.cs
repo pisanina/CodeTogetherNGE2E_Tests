@@ -142,6 +142,11 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("User_"+memberName)).Click();
         }
 
+        public bool CheckIsMember(string memberName)
+        {
+            return _driver.FindElements(By.Id("User_" + memberName)).Count==1;
+        }
+
         public bool ErrorDisplayed(string error)
         {
             return _driver.PageSource.Contains(error);

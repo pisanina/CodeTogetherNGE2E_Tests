@@ -44,11 +44,6 @@ namespace CodeTogetherNGE2E_Tests
             return _driver.FindElement(By.Id("skilllevel_" + techName)).Text == techLevel;
         }
 
-        public bool IsProjectNameDisplayed(string projectTitle)
-        {
-            return _driver.FindElement(By.Id(projectTitle)).Displayed;
-        }
-
         public void ClickOnProjectTitle(string projectTitle)
         {
             _driver.FindElement(By.Id(projectTitle)).Click();
@@ -87,6 +82,16 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsProjectDisplayed(string title)
         {
             return _driver.FindElements(By.Id(title)).Count == 1;
+        }
+
+        public int HowManySkills()
+        {
+           return  _driver.FindElement(By.Id("TechTable")).FindElements(By.CssSelector("tr")).Count-1;
+        }
+
+        public int HowManyProjects()
+        {
+            return _driver.FindElement(By.Id("ProjectsTable")).FindElements(By.CssSelector("tr")).Count-1;
         }
     }
 }

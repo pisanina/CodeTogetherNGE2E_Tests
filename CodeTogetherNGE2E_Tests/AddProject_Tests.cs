@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace CodeTogetherNGE2E_Tests
 {
-    public class AddProject_Tests
+    public class AddProject_Tests : TestsBase
     {
-        private IWebDriver _driver;
         private AddProject_PageObject _add;
         private Grid_PageObject _grid;
 
@@ -122,18 +121,17 @@ namespace CodeTogetherNGE2E_Tests
         [SetUp]
         public void SeleniumSetup()
         {
-            _driver = new ChromeDriver(Configuration.WebDriverLocation);
-            _driver.Url = Configuration.WebApiUrl;
-            _add = new AddProject_PageObject(_driver);
-            _grid = new Grid_PageObject(_driver);
-            _add.PrepareDB();
+            base.Setup();
+
+            _add = new AddProject_PageObject(driver);
+            _grid = new Grid_PageObject(driver);
             _add.ClickCookieConsent();
         }
 
         [TearDown]
         public void DownSelenium()
         {
-            _driver.Quit();
+            driver.Quit();
         }
     }
 }
