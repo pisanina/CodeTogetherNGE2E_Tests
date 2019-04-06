@@ -74,8 +74,69 @@ namespace CodeTogetherNGE2E_Tests
             _profile.ClickOnDelete("Java");
 
             Assert.True(_profile.IsNoSkillsMessageDisplayed());
-           
         }
+
+
+        [Test]
+        public void CheckAddingITRoles()
+        {
+            _profile.LoginOwner();
+            _profile.GoToUsers();
+            _users.ClickOnUser("TestUser@a.com");
+            _profile.SelectITRole(1);
+            _profile.ClickOnAddRole();
+
+            _profile.SelectITRole(5);
+            _profile.ClickOnAddRole();
+
+
+            Assert.True(_profile.HowManyITRoles() == 2);
+            Assert.True(_profile.CheckITRoleAdded("Automation Tester"));
+            Assert.True(_profile.CheckITRoleAdded("DBA"));
+        }
+
+        [Test]
+        public void CheckAddingITRolesThatExist()
+        {
+            _profile.LoginOwner();
+            _profile.GoToUsers();
+            _users.ClickOnUser("TestUser@a.com");
+            _profile.SelectITRole(1);
+            _profile.ClickOnAddRole();
+
+            _profile.SelectITRole(1);
+            _profile.ClickOnAddRole();
+
+
+            Assert.True(_profile.HowManyITRoles() == 1);
+            Assert.True(_profile.CheckITRoleAdded("Automation Tester"));
+        }
+
+        [Test]
+        public void CheckDeletingITRoles()
+        {
+            _profile.LoginOwner();
+            _profile.GoToUsers();
+            _users.ClickOnUser("TestUser@a.com");
+            _profile.SelectITRole(1);
+            _profile.ClickOnAddRole();
+
+            _profile.SelectITRole(5);
+            _profile.ClickOnAddRole();
+
+
+            Assert.True(_profile.HowManyITRoles() == 2);
+            Assert.True(_profile.CheckITRoleAdded("Automation Tester"));
+            Assert.True(_profile.CheckITRoleAdded("DBA"));
+
+            _profile.ClickOnDeleteITRole("DBA");
+            Assert.True(_profile.HowManyITRoles() == 1);
+
+            _profile.ClickOnDeleteITRole("Automation Tester");
+            Assert.True(_profile.IsNoITRoleMessageDisplayed());
+        }
+
+
 
         [Test]
         public void AreLinksToProjectsDetailsWorks()
@@ -96,6 +157,8 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_profile.IsAddButtonDisplayed());
             Assert.False(_profile.IsTechListAddDisplayed());
             Assert.False(_profile.IsSkillLevelAddDisplayed());
+            Assert.False(_profile.IsITRoleListAddDisplayed());
+            Assert.False(_profile.IsAddITRoleButtonDisplayed());
            
             Assert.True(_profile.IsProjectDisplayed("FirstProject"));
         }
@@ -110,13 +173,15 @@ namespace CodeTogetherNGE2E_Tests
             Assert.False(_profile.IsAddButtonDisplayed());
             Assert.False(_profile.IsTechListAddDisplayed());
             Assert.False(_profile.IsSkillLevelAddDisplayed());
+            Assert.False(_profile.IsITRoleListAddDisplayed());
+            Assert.False(_profile.IsAddITRoleButtonDisplayed());
 
             Assert.True(_profile.IsProjectDisplayed("FirstProject"));
         }
 
 
         [Test]
-        public void NoSkillsNoProjects()
+        public void NoSkillsNoProjectsNoRoles()
         {
             _profile.LoginCoder();
             _profile.GoToUsers();
@@ -124,6 +189,7 @@ namespace CodeTogetherNGE2E_Tests
 
             Assert.True(_profile.IsNoSkillsMessageDisplayed());
             Assert.True(_profile.IsNoProjectMessageDisplayed());
+            Assert.True(_profile.IsNoITRoleMessageDisplayed());
         }
 
         [Test]

@@ -8,13 +8,13 @@ namespace CodeTogetherNGE2E_Tests
 {
     public abstract class TestsBase
     {
-        protected IRepository repo;
+        private IRepository _repo;
         protected IWebDriver driver;
 
         protected void Setup()
         {
-            repo = new Repository();
-            repo.PrepareDbBeforeTest();
+            _repo = new Repository();
+            _repo.PrepareDbBeforeTest();
 
             driver = new ChromeDriver(Configuration.WebDriverLocation);
             driver.Url = Configuration.WebApiUrl;

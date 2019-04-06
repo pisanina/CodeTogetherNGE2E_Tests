@@ -17,15 +17,31 @@ namespace CodeTogetherNGE2E_Tests
             _driver.FindElement(By.Id("Add")).Click();
         }
 
+        public void ClickOnAddRole()
+        {
+            _driver.FindElement(By.Id("AddITRole")).Click();
+        }
+
         public void ClickOnDelete(string techName)
         {
             _driver.FindElement(By.Id("Delete_" + techName)).Click();
+        }
+
+        public void ClickOnDeleteITRole(string role)
+        {
+            _driver.FindElement(By.Id("Delete_" + role)).Click();
         }
 
         public void SelectTechnology(int techId)
         {
             var TechList = _driver.FindElement(By.Id("TechList"));
             TechList.FindElement(By.CssSelector("option[value=\"" + techId + "\"]")).Click();
+        }
+
+        public void SelectITRole(int roleId)
+        {
+            var TechList = _driver.FindElement(By.Id("ITRoleList"));
+            TechList.FindElement(By.CssSelector("option[value=\"" + roleId + "\"]")).Click();
         }
 
         public void SelectSkillLevel(int skillId)
@@ -39,9 +55,16 @@ namespace CodeTogetherNGE2E_Tests
             return _driver.FindElement(By.Id("userskill_" + techName)).Displayed;
         }
 
+        
+
         public bool CheckLevelOfSkill(string techName, string techLevel)
         {
             return _driver.FindElement(By.Id("skilllevel_" + techName)).Text == techLevel;
+        }
+
+        public bool CheckITRoleAdded(string roleName)
+        {
+            return _driver.FindElement(By.Id("usersrole_" + roleName)).Displayed;
         }
 
         public void ClickOnProjectTitle(string projectTitle)
@@ -59,6 +82,11 @@ namespace CodeTogetherNGE2E_Tests
             return _driver.FindElement(By.Id("noskill")).Displayed;
         }
 
+        public bool IsNoITRoleMessageDisplayed()
+        {
+            return _driver.FindElement(By.Id("noroles")).Displayed;
+        }
+
         public bool IsNoProjectMessageDisplayed()
         {
             return _driver.FindElement(By.Id("noproject")).Displayed;
@@ -67,6 +95,16 @@ namespace CodeTogetherNGE2E_Tests
         public bool IsAddButtonDisplayed()
         {
             return _driver.FindElements(By.Id("Add")).Count == 1;
+        }
+
+        public bool IsAddITRoleButtonDisplayed()
+        {
+            return _driver.FindElements(By.Id("AddITRole")).Count == 1;
+        }
+
+        public bool IsITRoleListAddDisplayed()
+        {
+            return _driver.FindElements(By.Id("ITRoleList")).Count == 1;
         }
 
         public bool IsTechListAddDisplayed()
@@ -87,6 +125,11 @@ namespace CodeTogetherNGE2E_Tests
         public int HowManySkills()
         {
            return  _driver.FindElement(By.Id("TechTable")).FindElements(By.CssSelector("tr")).Count-1;
+        }
+
+        public int HowManyITRoles()
+        {
+            return _driver.FindElement(By.Id("RolesTable")).FindElements(By.CssSelector("tr")).Count - 1;
         }
 
         public int HowManyProjects()
